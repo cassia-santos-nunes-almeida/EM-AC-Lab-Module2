@@ -10,7 +10,7 @@ Detailed technical reference. For quick context, see `CLAUDE.md` instead.
 |-------|-----------|---------|-------|
 | Framework | React | 19.2.x | Functional components, StrictMode |
 | Language | TypeScript | ~5.9.3 | Strict mode, `noUnusedLocals`, `noUnusedParameters` |
-| Build tool | Vite | 7.3.x | `@vitejs/plugin-react`, base path `/module2testBolt/` |
+| Build tool | Vite | 7.3.x | `@vitejs/plugin-react`, dynamic base path (env-aware) |
 | Styling | Tailwind CSS | 4.1.x | PostCSS plugin, `cn()` utility (clsx + tailwind-merge) |
 | Routing | React Router DOM | 7.13.x | BrowserRouter with basename from `import.meta.env.BASE_URL` |
 | Charts | Recharts | 3.7.x | LineChart, ScatterChart, ResponsiveContainer |
