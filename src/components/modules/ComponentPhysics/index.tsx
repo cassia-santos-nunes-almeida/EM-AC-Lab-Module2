@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { MathWrapper } from '../../common/MathWrapper';
+import { CollapsibleSection } from '../../common/CollapsibleSection';
 import {
   resistanceFormula,
   capacitanceFormula,
@@ -103,19 +104,22 @@ export function ComponentPhysics() {
 }
 
 /** Shared two-column layout for component sections (F13/F14). */
-function ComponentSectionLayout({ theory, materials, interactive }: {
+function ComponentSectionLayout({ theory, materialsTitle, materials, interactive }: {
   theory: ReactNode;
+  materialsTitle: string;
   materials: ReactNode;
   interactive: ReactNode;
 }) {
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="space-y-6">
-        <section className="bg-white rounded-lg shadow-md p-6">{theory}</section>
-        <section className="bg-white rounded-lg shadow-md p-6">{materials}</section>
+        <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">{theory}</section>
+        <CollapsibleSection title={materialsTitle} defaultOpen={false}>
+          {materials}
+        </CollapsibleSection>
       </div>
       <div className="space-y-6">
-        <section className="bg-white rounded-lg shadow-md p-6">{interactive}</section>
+        <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">{interactive}</section>
       </div>
     </div>
   );
@@ -176,23 +180,23 @@ function ResistorSection({
             </ul>
           </div>
       </>}
-      materials={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Material Properties</h3>
+      materialsTitle="Material Properties"
+      materials={
           <div className="space-y-2">
             {materials.filter(m => m.resistivity).map((material) => (
               <button
                 key={material.name}
                 onClick={() => onResistivityChange(material.resistivity!)}
-                className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-red-50 transition-colors text-sm"
+                className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm"
               >
-                <span className="font-medium">{material.name}</span>
-                <span className="text-slate-600 ml-2">
+                <span className="font-medium text-slate-800 dark:text-slate-200">{material.name}</span>
+                <span className="text-slate-600 dark:text-slate-400 ml-2">
                   &rho; = {material.resistivity?.toExponential(2)} &Omega;&middot;m
                 </span>
               </button>
             ))}
           </div>
-      </>}
+      }
       interactive={<>
           {/* 1. Circuit Symbol */}
           <div className="bg-slate-50 p-4 rounded-lg mb-5">
@@ -376,23 +380,23 @@ function CapacitorSection({
             </ul>
           </div>
       </>}
-      materials={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Dielectric Materials</h3>
+      materialsTitle="Dielectric Materials"
+      materials={
           <div className="space-y-2">
             {materials.filter(m => m.permittivity).map((material) => (
               <button
                 key={material.name}
                 onClick={() => onPermittivityChange(material.permittivity!)}
-                className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-green-50 transition-colors text-sm"
+                className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-sm"
               >
-                <span className="font-medium">{material.name}</span>
-                <span className="text-slate-600 ml-2">
+                <span className="font-medium text-slate-800 dark:text-slate-200">{material.name}</span>
+                <span className="text-slate-600 dark:text-slate-400 ml-2">
                   &epsilon; = {material.permittivity?.toExponential(2)} F/m
                 </span>
               </button>
             ))}
           </div>
-      </>}
+      }
       interactive={<>
           {/* 1. Circuit Symbol */}
           <div className="bg-slate-50 p-4 rounded-lg mb-5">
@@ -615,30 +619,30 @@ function InductorSection({
             </ul>
           </div>
       </>}
-      materials={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Core Materials</h3>
+      materialsTitle="Core Materials"
+      materials={
           <div className="space-y-2">
             {materials.filter(m => m.permeability).slice(0, 3).map((material) => (
               <button
                 key={material.name}
                 onClick={() => onPermeabilityChange(material.permeability!)}
-                className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-purple-50 transition-colors text-sm"
+                className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors text-sm"
               >
-                <span className="font-medium">{material.name}</span>
-                <span className="text-slate-600 ml-2">
+                <span className="font-medium text-slate-800 dark:text-slate-200">{material.name}</span>
+                <span className="text-slate-600 dark:text-slate-400 ml-2">
                   &mu; = {material.permeability?.toExponential(2)} H/m
                 </span>
               </button>
             ))}
             <button
               onClick={() => onPermeabilityChange(6.3e-3)}
-              className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-purple-50 transition-colors text-sm"
+              className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors text-sm"
             >
-              <span className="font-medium">Iron Core</span>
-              <span className="text-slate-600 ml-2">&mu; = 6.30e-3 H/m</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">Iron Core</span>
+              <span className="text-slate-600 dark:text-slate-400 ml-2">&mu; = 6.30e-3 H/m</span>
             </button>
           </div>
-      </>}
+      }
       interactive={<>
           {/* 1. Circuit Symbol */}
           <div className="bg-slate-50 p-4 rounded-lg mb-5">

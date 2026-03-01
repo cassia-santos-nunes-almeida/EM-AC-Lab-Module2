@@ -1,10 +1,16 @@
 import { useState, useMemo, useDeferredValue } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { calculateCircuitResponse, type CircuitType, type InputType, type CircuitResponse } from '../../../utils/circuitSolver';
+import { calculateCircuitResponse, calculateTransferFunction, type CircuitType, type InputType, type CircuitResponse } from '../../../utils/circuitSolver';
+import { dampingLabel } from '../../../types/circuit';
 import { MathWrapper } from '../../common/MathWrapper';
 import { ResponseChartTooltip } from '../../common/CircuitCharts';
 import { CircuitParameterSliders } from '../../common/CircuitParameterSliders';
+import { CollapsibleSection } from '../../common/CollapsibleSection';
+import { ChallengeCard } from '../../common/ChallengeCard';
+import { ConceptCheck } from '../../common/ConceptCheck';
 import { CircuitDiagram } from './CircuitDiagram';
+import { SDomainPanel } from './SDomainPanel';
+import { getChallenges } from './challenges';
 import { useThemeStore } from '../../../store/progressStore';
 
 /** Circuit equations panel showing formulas for the selected circuit/input type (F24). */
@@ -14,9 +20,8 @@ function CircuitEquations({ circuitType, inputType, response }: {
   response: CircuitResponse;
 }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
+    <div>
       <div className="flex items-center gap-3 mb-4">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Circuit Equations</h3>
         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
           inputType === 'step'
             ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
@@ -289,6 +294,7 @@ export function InteractiveLab() {
   const [autoDuration, setAutoDuration] = useState(false);
   const [showCurrent, setShowCurrent] = useState(true);
   const [showVoltage, setShowVoltage] = useState(true);
+  const [showSDomain, setShowSDomain] = useState(false);
 
   const isDark = useThemeStore((s) => s.theme) === 'dark';
   const chartColors = {
@@ -352,6 +358,21 @@ export function InteractiveLab() {
     return null;
   }, [circuitType, response]);
 
+  // Transfer function data for S-Domain panel (RLC only)
+  const transferFunction = useMemo(() => {
+    if (circuitType !== 'RLC') return null;
+    const tf = calculateTransferFunction(dR, dL, dC);
+    const alpha = dR / (2 * dL);
+    const omega0 = 1 / Math.sqrt(dL * dC);
+    const zeta = alpha / omega0;
+    return { ...tf, alpha, omega0, zeta };
+  }, [circuitType, dR, dL, dC]);
+
+  const challenges = useMemo(() =>
+    getChallenges({ circuitType, inputType, R: dR, L: dL, C: dC }),
+    [circuitType, inputType, dR, dL, dC],
+  );
+
   const handleReset = () => {
     setR(100);
     setL(0.1);
@@ -388,23 +409,48 @@ export function InteractiveLab() {
           ))}
         </div>
 
-        <div className="flex items-center gap-1 mr-2">
-          <span className="text-xs text-slate-500 dark:text-slate-400 mr-2 font-medium">Input:</span>
-          {(['step', 'impulse'] as const).map((type) => (
+        <div className="flex items-center gap-3 mr-2">
+          <div className="flex items-center gap-1">
+            <span className="text-xs text-slate-500 dark:text-slate-400 mr-2 font-medium">Input:</span>
+            {(['step', 'impulse'] as const).map((type) => (
+              <button
+                key={type}
+                onClick={() => setInputType(type)}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors capitalize ${
+                  inputType === type
+                    ? 'bg-engineering-blue-600 text-white shadow-sm'
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
+                }`}
+              >
+                {type === 'step' ? 'Step u(t)' : 'Impulse \u03B4(t)'}
+              </button>
+            ))}
+          </div>
+          {circuitType === 'RLC' && (
             <button
-              key={type}
-              onClick={() => setInputType(type)}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors capitalize ${
-                inputType === type
-                  ? 'bg-engineering-blue-600 text-white shadow-sm'
+              onClick={() => setShowSDomain(!showSDomain)}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+                showSDomain
+                  ? 'bg-purple-600 text-white shadow-sm'
                   : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
               }`}
             >
-              {type === 'step' ? 'Step u(t)' : 'Impulse \u03B4(t)'}
+              S-Domain
             </button>
-          ))}
+          )}
         </div>
       </div>
+
+      {/* Try This: guided exploration challenges */}
+      {challenges.length > 0 && (
+        <CollapsibleSection title="Try This" defaultOpen={true} variant="inline" className="space-y-3">
+          <div className="grid sm:grid-cols-2 gap-3 px-1">
+            {challenges.map(challenge => (
+              <ChallengeCard key={challenge.id} challenge={challenge} />
+            ))}
+          </div>
+        </CollapsibleSection>
+      )}
 
       {/* ROW 1: Config + Circuit Diagram (2-col) */}
       <div className="grid lg:grid-cols-2 gap-6">
@@ -427,8 +473,27 @@ export function InteractiveLab() {
         </div>
       </div>
 
-      {/* ROW 2: Equations */}
-      <CircuitEquations circuitType={circuitType} inputType={inputType} response={response} />
+      {/* ROW 2: Equations (collapsible) */}
+      <CollapsibleSection title="Circuit Equations" defaultOpen={true}>
+        <CircuitEquations circuitType={circuitType} inputType={inputType} response={response} />
+      </CollapsibleSection>
+
+      {/* S-Domain Panel (RLC only, toggled) */}
+      {showSDomain && transferFunction && response.dampingType && (
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">S-Domain Analysis</h3>
+          <SDomainPanel
+            poles={transferFunction.poles}
+            numerator={transferFunction.numerator}
+            denominator={transferFunction.denominator}
+            alpha={transferFunction.alpha}
+            omega0={transferFunction.omega0}
+            zeta={transferFunction.zeta}
+            dampingType={dampingLabel(response.dampingType)}
+            chartColors={chartColors}
+          />
+        </div>
+      )}
 
       {/* ROW 3: Chart + Analysis side by side */}
       <div className="grid lg:grid-cols-[1fr_320px] gap-6">
@@ -506,9 +571,25 @@ export function InteractiveLab() {
         </div>
       </div>
 
-      {/* Tips */}
-      <div className="bg-gradient-to-r from-engineering-blue-50 to-slate-50 dark:from-engineering-blue-900/20 dark:to-slate-800 rounded-lg shadow-md p-6 border-l-4 border-engineering-blue-600">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-3">Experiment Tips</h3>
+      {/* Concept check */}
+      {circuitType === 'RLC' && (
+        <ConceptCheck data={{
+          mode: 'multiple-choice',
+          question: 'If you increase R from underdamped to overdamped, does the steady-state capacitor voltage change?',
+          options: [
+            { text: 'No — steady-state voltage stays at Vs', correct: true, explanation: 'Correct! At DC steady state, the capacitor is fully charged and no current flows. The voltage drop across R is zero regardless of R, so V_C = V_s always. R only affects how the circuit gets there (oscillation vs. smooth approach).' },
+            { text: 'Yes — higher R means lower steady-state voltage', correct: false, explanation: 'At steady state, current is zero. With no current, there\'s no voltage drop across R (V_R = IR = 0), so all the source voltage appears across the capacitor: V_C = V_s.' },
+            { text: 'Yes — higher R means higher steady-state voltage', correct: false, explanation: 'The steady-state voltage is always V_s for a step response, independent of R. Try it with the sliders to verify!' },
+          ],
+        }} />
+      )}
+
+      {/* Tips (collapsible, default closed to reduce scroll) */}
+      <CollapsibleSection
+        title="Experiment Tips"
+        defaultOpen={false}
+        className="bg-gradient-to-r from-engineering-blue-50 to-slate-50 dark:from-engineering-blue-900/20 dark:to-slate-800 border-l-4 border-engineering-blue-600"
+      >
         <ul className="space-y-2 text-slate-700 dark:text-slate-300">
           <li className="flex items-start gap-2">
             <span className="text-engineering-blue-600 font-bold mt-1">&#8226;</span>
@@ -527,7 +608,7 @@ export function InteractiveLab() {
             <span>The dashed green line on the chart marks the time constant &#964;. For underdamped RLC, the purple line marks one damped period T<sub>d</sub>.</span>
           </li>
         </ul>
-      </div>
+      </CollapsibleSection>
     </div>
   );
 }
