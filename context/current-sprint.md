@@ -46,7 +46,14 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] ModuleNavigation component (Previous/Next links on all 6 pages)
 - [x] CircuitDiagram SVG dark mode (CSS custom properties for wire/text colors)
 - [x] S-Domain Theory: prominent CTA card linking to Interactive Lab
+- [x] Interactive Lab onboarding banner + challenge progress counter
+- [x] Component-level tests — 28 new React Testing Library tests for ConceptCheck, CollapsibleSection, Tabs, ChallengeCard, ModuleNavigation (65 total)
+- [x] ComponentPhysics decomposed into sub-components (770 → ~107 lines in index.tsx)
+- [x] TimeDomain decomposed into sub-components (665 → ~430 lines in index.tsx)
+- [x] PWA offline detection — global banner in Layout, AiTutor offline guard + banner (useSyncExternalStore)
+- [x] Scroll-to-section — TableOfContents component with pill-style jump links on Circuit Analysis page
 
 ## Next
-- Component-level tests (React Testing Library)
-- PWA offline improvements
+- Performance: consider manualChunks for large vendor bundles (recharts, katex)
+- Accessibility audit pass with screen reader
+- End-to-end test coverage

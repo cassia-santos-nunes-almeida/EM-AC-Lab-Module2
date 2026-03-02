@@ -4,6 +4,22 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
+### 2026-03-02 — Scroll-to-section with TableOfContents
+**Decision**: Create a reusable `TableOfContents` component with pill-style jump links. Add to TimeDomain (Circuit Analysis) page only.
+**Reason**: TimeDomain has multiple vertically stacked sections that benefit from quick navigation. Other pages (ComponentPhysics, SDomainAnalysis, LaplaceTheory) use tab-based layouts where a TOC adds no value. Uses `scrollIntoView({ behavior: 'smooth' })` with `scroll-mt-4` for proper offset.
+
+### 2026-03-02 — PWA offline detection with useSyncExternalStore
+**Decision**: Use `useSyncExternalStore` with `online`/`offline` event listeners for reactive offline detection. Global banner in Layout, targeted guard + banner in AiTutor.
+**Reason**: `useSyncExternalStore` is the correct React 18+ primitive for subscribing to browser APIs. It handles SSR (server snapshot returns `true`), avoids stale closures, and is more reliable than `useEffect` + `useState` for external state. AiTutor gets an additional `navigator.onLine` check before `sendMessage()` to prevent doomed API calls.
+
+### 2026-03-02 — Decompose ComponentPhysics and TimeDomain into sub-components
+**Decision**: Extract sub-components from the two largest page components. ComponentPhysics → ResistorSection, CapacitorSection, InductorSection, ComponentSectionLayout. TimeDomain → CircuitComparisonLayout, MethodComparisonTable, ResponseComparisons.
+**Reason**: ComponentPhysics (770 lines) and TimeDomain (665 lines) were the largest files. Extraction improves readability, testability, and enables focused code reviews. Index files become thin orchestrators (~100-430 lines) that import and compose sub-components.
+
+### 2026-03-02 — Component-level tests with React Testing Library
+**Decision**: Add component tests for 5 shared UI components (ConceptCheck, CollapsibleSection, Tabs, ChallengeCard, ModuleNavigation). Use `@testing-library/user-event` for realistic interactions.
+**Reason**: Only math utility tests existed (37 tests). Component tests catch regressions in interactive behavior (expand/collapse, tab switching, answer validation) that unit tests can't cover. Started with shared components since they're used across all pages.
+
 ### 2026-03-02 — Module navigation component
 **Decision**: Create a shared `ModuleNavigation` component with Previous/Next links, embedded at the bottom of every module page.
 **Reason**: Students had to use the sidebar for all navigation, breaking flow. Sequential links at the bottom of content guide linear learners through the intended path.
