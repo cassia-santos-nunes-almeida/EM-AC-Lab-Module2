@@ -442,16 +442,30 @@ export function InteractiveLab() {
         </div>
       </div>
 
-      {/* Try This: guided exploration challenges */}
-      {challenges.length > 0 && (
-        <CollapsibleSection title="Try This" defaultOpen={true} variant="inline" className="space-y-3">
-          <div className="grid sm:grid-cols-2 gap-3 px-1">
-            {challenges.map(challenge => (
-              <ChallengeCard key={challenge.id} challenge={challenge} />
-            ))}
-          </div>
-        </CollapsibleSection>
-      )}
+      {/* Getting started banner + guided challenges */}
+      {challenges.length > 0 && (() => {
+        const completed = challenges.filter(c => c.check?.()).length;
+        const checkable = challenges.filter(c => c.check).length;
+        return (
+          <>
+            <div className="bg-engineering-blue-50 dark:bg-engineering-blue-900/20 border border-engineering-blue-200 dark:border-engineering-blue-800 rounded-lg px-4 py-3 text-sm text-engineering-blue-800 dark:text-engineering-blue-200">
+              Select a circuit type above, adjust the sliders, and work through the guided challenges below.
+            </div>
+            <CollapsibleSection
+              title={checkable > 0 ? `Try This (${completed}/${checkable} completed)` : 'Try This'}
+              defaultOpen={true}
+              variant="inline"
+              className="space-y-3"
+            >
+              <div className="grid sm:grid-cols-2 gap-3 px-1">
+                {challenges.map(challenge => (
+                  <ChallengeCard key={challenge.id} challenge={challenge} />
+                ))}
+              </div>
+            </CollapsibleSection>
+          </>
+        );
+      })()}
 
       {/* ROW 1: Config + Circuit Diagram (2-col) */}
       <div className="grid lg:grid-cols-2 gap-6">
