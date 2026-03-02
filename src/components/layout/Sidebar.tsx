@@ -20,7 +20,7 @@ const navigationLinks = [
   { to: '/component-physics', icon: Zap, label: 'Component Physics', step: 1 },
   { to: '/circuit-analysis', icon: Clock, label: 'Circuit Analysis', step: 2 },
   { to: '/laplace-theory', icon: FunctionSquare, label: 'Laplace Theory', step: 3 },
-  { to: '/s-domain', icon: GitBranch, label: 'S-Domain Analysis', step: 4 },
+  { to: '/s-domain', icon: GitBranch, label: 'S-Domain Theory', step: 4 },
   { to: '/interactive-lab', icon: FlaskConical, label: 'Interactive Lab', step: 5 },
 ];
 

@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { MathWrapper } from '../../common/MathWrapper';
+import { CollapsibleSection } from '../../common/CollapsibleSection';
 import {
   resistanceFormula,
   capacitanceFormula,
@@ -35,17 +36,17 @@ export function ComponentPhysics() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold text-slate-900 mb-2">Component Physics</h1>
-        <p className="text-lg text-slate-600">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Component Physics</h1>
+        <p className="text-lg text-slate-600 dark:text-slate-400">
           Understanding the physical foundations of circuit components
         </p>
       </div>
 
-      <div className="flex border-b-2 border-slate-200">
+      <div className="flex border-b-2 border-slate-200 dark:border-slate-700">
         {([
-          { id: 'resistor' as const, label: 'Resistor', color: 'border-red-500 text-red-700 bg-red-50' },
-          { id: 'capacitor' as const, label: 'Capacitor', color: 'border-green-500 text-green-700 bg-green-50' },
-          { id: 'inductor' as const, label: 'Inductor', color: 'border-purple-500 text-purple-700 bg-purple-50' },
+          { id: 'resistor' as const, label: 'Resistor', color: 'border-red-500 text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20' },
+          { id: 'capacitor' as const, label: 'Capacitor', color: 'border-green-500 text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20' },
+          { id: 'inductor' as const, label: 'Inductor', color: 'border-purple-500 text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20' },
         ]).map((component) => (
           <button
             key={component.id}
@@ -53,7 +54,7 @@ export function ComponentPhysics() {
             className={`px-6 py-3 font-semibold text-sm transition-colors border-b-3 -mb-[2px] ${
               activeComponent === component.id
                 ? component.color
-                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >
             {component.label}
@@ -103,19 +104,22 @@ export function ComponentPhysics() {
 }
 
 /** Shared two-column layout for component sections (F13/F14). */
-function ComponentSectionLayout({ theory, materials, interactive }: {
+function ComponentSectionLayout({ theory, materialsTitle, materials, interactive }: {
   theory: ReactNode;
+  materialsTitle: string;
   materials: ReactNode;
   interactive: ReactNode;
 }) {
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="space-y-6">
-        <section className="bg-white rounded-lg shadow-md p-6">{theory}</section>
-        <section className="bg-white rounded-lg shadow-md p-6">{materials}</section>
+        <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">{theory}</section>
+        <CollapsibleSection title={materialsTitle} defaultOpen={false}>
+          {materials}
+        </CollapsibleSection>
       </div>
       <div className="space-y-6">
-        <section className="bg-white rounded-lg shadow-md p-6">{interactive}</section>
+        <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">{interactive}</section>
       </div>
     </div>
   );
@@ -146,28 +150,28 @@ function ResistorSection({
   return (
     <ComponentSectionLayout
       theory={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Theory</h3>
-          <p className="text-slate-700 mb-4">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Theory</h3>
+          <p className="text-slate-700 dark:text-slate-300 mb-4">
             A resistor opposes the flow of electric current. Resistance depends on the material's
             resistivity, its length, and cross-sectional area.
           </p>
 
-          <div className="bg-slate-50 p-4 rounded-lg space-y-3">
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg space-y-3">
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Basic Formula:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Basic Formula:</p>
               <MathWrapper formula={resistanceFormula.basic} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Ohm's Law:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Ohm's Law:</p>
               <MathWrapper formula={resistanceFormula.ohmsLaw} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Power Dissipation:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Power Dissipation:</p>
               <MathWrapper formula={resistanceFormula.power} block />
             </div>
           </div>
 
-          <div className="mt-4 text-sm text-slate-600">
+          <div className="mt-4 text-sm text-slate-600 dark:text-slate-400">
             <p className="mb-2"><strong>Where:</strong></p>
             <ul className="space-y-1 ml-4">
               <li><MathWrapper formula="\rho" /> = Resistivity (&Omega;&middot;m)</li>
@@ -176,27 +180,27 @@ function ResistorSection({
             </ul>
           </div>
       </>}
-      materials={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Material Properties</h3>
+      materialsTitle="Material Properties"
+      materials={
           <div className="space-y-2">
             {materials.filter(m => m.resistivity).map((material) => (
               <button
                 key={material.name}
                 onClick={() => onResistivityChange(material.resistivity!)}
-                className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-red-50 transition-colors text-sm"
+                className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm"
               >
-                <span className="font-medium">{material.name}</span>
-                <span className="text-slate-600 ml-2">
+                <span className="font-medium text-slate-800 dark:text-slate-200">{material.name}</span>
+                <span className="text-slate-600 dark:text-slate-400 ml-2">
                   &rho; = {material.resistivity?.toExponential(2)} &Omega;&middot;m
                 </span>
               </button>
             ))}
           </div>
-      </>}
+      }
       interactive={<>
           {/* 1. Circuit Symbol */}
-          <div className="bg-slate-50 p-4 rounded-lg mb-5">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Circuit Symbol</p>
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg mb-5">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Circuit Symbol</p>
             <svg viewBox="0 0 280 60" className="w-full max-w-xs mx-auto">
               <line x1="20" y1="30" x2="60" y2="30" stroke="#1e40af" strokeWidth="2.5" />
               <polyline points="60,30 72,10 96,50 120,10 144,50 168,10 192,50 204,30" fill="none" stroke="#1e40af" strokeWidth="2.5" strokeLinejoin="round" />
@@ -206,8 +210,8 @@ function ResistorSection({
           </div>
 
           {/* 2. Engineering Drawing: Side View + Cross-Section */}
-          <div className="bg-slate-50 p-4 rounded-lg mb-5">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Physical Structure</p>
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg mb-5">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Physical Structure</p>
 
             {/* Side view (longitudinal) */}
             <div className="mb-3">
@@ -279,19 +283,19 @@ function ResistorSection({
           {/* 3. Sliders */}
           <div className="space-y-4 mb-5">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Length: <span className="text-red-600 font-semibold">{length.toFixed(2)} m</span>
               </label>
               <input type="range" min="0.1" max="2" step="0.1" value={length} onChange={(e) => onLengthChange(parseFloat(e.target.value))} className="w-full accent-red-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Area: <span className="text-red-600 font-semibold">{(area * 1e6).toFixed(2)} mm&sup2;</span>
               </label>
               <input type="range" min="0.1" max="10" step="0.1" value={area * 1e6} onChange={(e) => onAreaChange(parseFloat(e.target.value) * 1e-6)} className="w-full accent-red-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Resistivity: <span className="text-red-600 font-semibold">{resistivity.toExponential(2)} &Omega;&middot;m</span>
               </label>
               <input type="range" min="1" max="100" step="1" value={resistivity * 1e8} onChange={(e) => onResistivityChange(parseFloat(e.target.value) * 1e-8)} className="w-full accent-red-500" />
@@ -299,9 +303,9 @@ function ResistorSection({
           </div>
 
           {/* 4. Result */}
-          <div className="bg-red-50 p-4 rounded-lg border border-red-100">
-            <p className="text-sm font-semibold text-red-900 mb-1">Calculated Resistance:</p>
-            <p className="text-3xl font-bold text-red-700">{resistance.toFixed(3)} &#937;</p>
+          <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-100 dark:border-red-800">
+            <p className="text-sm font-semibold text-red-900 dark:text-red-300 mb-1">Calculated Resistance:</p>
+            <p className="text-3xl font-bold text-red-700 dark:text-red-400">{resistance.toFixed(3)} &#937;</p>
           </div>
       </>}
     />
@@ -341,33 +345,33 @@ function CapacitorSection({
   return (
     <ComponentSectionLayout
       theory={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Theory</h3>
-          <p className="text-slate-700 mb-4">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Theory</h3>
+          <p className="text-slate-700 dark:text-slate-300 mb-4">
             A capacitor stores energy in an electric field between two conductive plates
             separated by a dielectric material. Capacitance depends on plate area, separation
             distance, and the dielectric's permittivity.
           </p>
 
-          <div className="bg-slate-50 p-4 rounded-lg space-y-3">
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg space-y-3">
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Basic Formula:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Basic Formula:</p>
               <MathWrapper formula={capacitanceFormula.basic} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Current-Voltage Relation:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Current-Voltage Relation:</p>
               <MathWrapper formula={capacitanceFormula.currentVoltage} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Energy Storage:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Energy Storage:</p>
               <MathWrapper formula={capacitanceFormula.energy} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Impedance (AC):</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Impedance (AC):</p>
               <MathWrapper formula={capacitanceFormula.impedance} block />
             </div>
           </div>
 
-          <div className="mt-4 text-sm text-slate-600">
+          <div className="mt-4 text-sm text-slate-600 dark:text-slate-400">
             <p className="mb-2"><strong>Where:</strong></p>
             <ul className="space-y-1 ml-4">
               <li><MathWrapper formula="\epsilon" /> = Permittivity (F/m)</li>
@@ -376,27 +380,27 @@ function CapacitorSection({
             </ul>
           </div>
       </>}
-      materials={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Dielectric Materials</h3>
+      materialsTitle="Dielectric Materials"
+      materials={
           <div className="space-y-2">
             {materials.filter(m => m.permittivity).map((material) => (
               <button
                 key={material.name}
                 onClick={() => onPermittivityChange(material.permittivity!)}
-                className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-green-50 transition-colors text-sm"
+                className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-sm"
               >
-                <span className="font-medium">{material.name}</span>
-                <span className="text-slate-600 ml-2">
+                <span className="font-medium text-slate-800 dark:text-slate-200">{material.name}</span>
+                <span className="text-slate-600 dark:text-slate-400 ml-2">
                   &epsilon; = {material.permittivity?.toExponential(2)} F/m
                 </span>
               </button>
             ))}
           </div>
-      </>}
+      }
       interactive={<>
           {/* 1. Circuit Symbol */}
-          <div className="bg-slate-50 p-4 rounded-lg mb-5">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Circuit Symbol</p>
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg mb-5">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Circuit Symbol</p>
             <svg viewBox="0 0 280 60" className="w-full max-w-xs mx-auto">
               <line x1="20" y1="30" x2="120" y2="30" stroke="#1e40af" strokeWidth="2.5" />
               <line x1="120" y1="8" x2="120" y2="52" stroke="#1e40af" strokeWidth="3" />
@@ -407,8 +411,8 @@ function CapacitorSection({
           </div>
 
           {/* 2. Engineering Drawing: Side View + Front View */}
-          <div className="bg-slate-50 p-4 rounded-lg mb-5">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Physical Structure</p>
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg mb-5">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Physical Structure</p>
 
             {/* Side view */}
             <div className="mb-3">
@@ -521,19 +525,19 @@ function CapacitorSection({
           {/* 3. Sliders */}
           <div className="space-y-4 mb-5">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Plate Area: <span className="text-green-600 font-semibold">{(area * 10000).toFixed(2)} cm&sup2;</span>
               </label>
               <input type="range" min="0.5" max="10" step="0.5" value={area * 10000} onChange={(e) => onAreaChange(parseFloat(e.target.value) / 10000)} className="w-full accent-green-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Distance: <span className="text-green-600 font-semibold">{(distance * 1000).toFixed(2)} mm</span>
               </label>
               <input type="range" min="0.1" max="5" step="0.1" value={distance * 1000} onChange={(e) => onDistanceChange(parseFloat(e.target.value) / 1000)} className="w-full accent-green-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Permittivity: <span className="text-green-600 font-semibold">{permittivity.toExponential(2)} F/m</span>
               </label>
               <input type="range" min="8.854" max="40" step="0.1" value={permittivity * 1e12} onChange={(e) => onPermittivityChange(parseFloat(e.target.value) * 1e-12)} className="w-full accent-green-500" />
@@ -541,9 +545,9 @@ function CapacitorSection({
           </div>
 
           {/* 4. Result */}
-          <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-            <p className="text-sm font-semibold text-green-900 mb-1">Calculated Capacitance:</p>
-            <p className="text-3xl font-bold text-green-700">{(capacitance * 1e12).toFixed(2)} pF</p>
+          <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
+            <p className="text-sm font-semibold text-green-900 dark:text-green-300 mb-1">Calculated Capacitance:</p>
+            <p className="text-3xl font-bold text-green-700 dark:text-green-400">{(capacitance * 1e12).toFixed(2)} pF</p>
           </div>
       </>}
     />
@@ -579,33 +583,33 @@ function InductorSection({
   return (
     <ComponentSectionLayout
       theory={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Theory</h3>
-          <p className="text-slate-700 mb-4">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Theory</h3>
+          <p className="text-slate-700 dark:text-slate-300 mb-4">
             An inductor stores energy in a magnetic field created by current flowing through
             a coil of wire. Inductance depends on the number of turns, core material permeability,
             coil area, and length.
           </p>
 
-          <div className="bg-slate-50 p-4 rounded-lg space-y-3">
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg space-y-3">
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Basic Formula:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Basic Formula:</p>
               <MathWrapper formula={inductanceFormula.basic} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Voltage-Current Relation:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Voltage-Current Relation:</p>
               <MathWrapper formula={inductanceFormula.voltageCurrents} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Energy Storage:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Energy Storage:</p>
               <MathWrapper formula={inductanceFormula.energy} block />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Impedance (AC):</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Impedance (AC):</p>
               <MathWrapper formula={inductanceFormula.impedance} block />
             </div>
           </div>
 
-          <div className="mt-4 text-sm text-slate-600">
+          <div className="mt-4 text-sm text-slate-600 dark:text-slate-400">
             <p className="mb-2"><strong>Where:</strong></p>
             <ul className="space-y-1 ml-4">
               <li><MathWrapper formula="N" /> = Number of turns</li>
@@ -615,34 +619,34 @@ function InductorSection({
             </ul>
           </div>
       </>}
-      materials={<>
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">Core Materials</h3>
+      materialsTitle="Core Materials"
+      materials={
           <div className="space-y-2">
             {materials.filter(m => m.permeability).slice(0, 3).map((material) => (
               <button
                 key={material.name}
                 onClick={() => onPermeabilityChange(material.permeability!)}
-                className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-purple-50 transition-colors text-sm"
+                className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors text-sm"
               >
-                <span className="font-medium">{material.name}</span>
-                <span className="text-slate-600 ml-2">
+                <span className="font-medium text-slate-800 dark:text-slate-200">{material.name}</span>
+                <span className="text-slate-600 dark:text-slate-400 ml-2">
                   &mu; = {material.permeability?.toExponential(2)} H/m
                 </span>
               </button>
             ))}
             <button
               onClick={() => onPermeabilityChange(6.3e-3)}
-              className="w-full text-left px-4 py-2 rounded bg-slate-50 hover:bg-purple-50 transition-colors text-sm"
+              className="w-full text-left px-4 py-2 rounded bg-slate-50 dark:bg-slate-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors text-sm"
             >
-              <span className="font-medium">Iron Core</span>
-              <span className="text-slate-600 ml-2">&mu; = 6.30e-3 H/m</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">Iron Core</span>
+              <span className="text-slate-600 dark:text-slate-400 ml-2">&mu; = 6.30e-3 H/m</span>
             </button>
           </div>
-      </>}
+      }
       interactive={<>
           {/* 1. Circuit Symbol */}
-          <div className="bg-slate-50 p-4 rounded-lg mb-5">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Circuit Symbol</p>
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg mb-5">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Circuit Symbol</p>
             <svg viewBox="0 0 280 60" className="w-full max-w-xs mx-auto">
               <line x1="20" y1="35" x2="60" y2="35" stroke="#059669" strokeWidth="2.5" />
               <path d="M60,35 C60,15 80,15 80,35 C80,15 100,15 100,35 C100,15 120,15 120,35 C120,15 140,15 140,35 C140,15 160,15 160,35 C160,15 180,15 180,35" fill="none" stroke="#059669" strokeWidth="2.5" />
@@ -652,8 +656,8 @@ function InductorSection({
           </div>
 
           {/* 2. Engineering Drawing: Side View + Cross-Section */}
-          <div className="bg-slate-50 p-4 rounded-lg mb-5">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Physical Structure</p>
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg mb-5">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Physical Structure</p>
 
             {/* Side view */}
             <div className="mb-3">
@@ -726,25 +730,25 @@ function InductorSection({
           {/* 3. Sliders */}
           <div className="space-y-4 mb-5">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Number of Turns: <span className="text-purple-600 font-semibold">{turns}</span>
               </label>
               <input type="range" min="10" max="500" step="10" value={turns} onChange={(e) => onTurnsChange(parseFloat(e.target.value))} className="w-full accent-purple-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Core Area: <span className="text-purple-600 font-semibold">{(area * 10000).toFixed(2)} cm&sup2;</span>
               </label>
               <input type="range" min="0.5" max="10" step="0.5" value={area * 10000} onChange={(e) => onAreaChange(parseFloat(e.target.value) / 10000)} className="w-full accent-purple-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Coil Length: <span className="text-purple-600 font-semibold">{(length * 100).toFixed(1)} cm</span>
               </label>
               <input type="range" min="5" max="50" step="1" value={length * 100} onChange={(e) => onLengthChange(parseFloat(e.target.value) / 100)} className="w-full accent-purple-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Permeability: <span className="text-purple-600 font-semibold">{permeability.toExponential(2)} H/m</span>
               </label>
               <input type="range" min="1.257" max="10" step="0.1" value={permeability * 1e6} onChange={(e) => onPermeabilityChange(parseFloat(e.target.value) * 1e-6)} className="w-full accent-purple-500" />
@@ -752,9 +756,9 @@ function InductorSection({
           </div>
 
           {/* 4. Result */}
-          <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
-            <p className="text-sm font-semibold text-purple-900 mb-1">Calculated Inductance:</p>
-            <p className="text-3xl font-bold text-purple-700">{(inductance * 1000).toFixed(2)} mH</p>
+          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
+            <p className="text-sm font-semibold text-purple-900 dark:text-purple-300 mb-1">Calculated Inductance:</p>
+            <p className="text-3xl font-bold text-purple-700 dark:text-purple-400">{(inductance * 1000).toFixed(2)} mH</p>
           </div>
       </>}
     />
