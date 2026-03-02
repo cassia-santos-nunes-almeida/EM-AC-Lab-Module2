@@ -4,6 +4,22 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
+### 2026-03-02 — Progressive disclosure with CollapsibleSection
+**Decision**: Create a shared `CollapsibleSection` component and use it throughout modules for secondary content (material properties, experiment tips, method comparisons).
+**Reason**: Long pages overwhelm students. Collapsible sections let students focus on primary content first and expand details on demand. Reduces initial cognitive load while keeping all content accessible.
+
+### 2026-03-02 — Guided challenges in InteractiveLab
+**Decision**: Add `ChallengeCard` component with auto-check functions and 4 guided challenges (find critical damping, make it ring, double time constant, impulse vs step).
+**Reason**: Students need structured exploration goals, not just open-ended sliders. Challenges with math-based auto-checking provide immediate feedback without requiring a backend.
+
+### 2026-03-02 — ConceptCheck component (multiple-choice + predict-reveal)
+**Decision**: Create a reusable `ConceptCheck` component with two modes and embed throughout modules.
+**Reason**: Active recall is more effective than passive reading. Lightweight concept checks at the end of sections reinforce key takeaways. No grading system needed — self-assessment only.
+
+### 2026-03-02 — S-Domain Panel in InteractiveLab (not separate page)
+**Decision**: Add S-Domain analysis as a toggle panel within InteractiveLab rather than keeping it as a separate interactive page.
+**Reason**: Students benefit from seeing time-domain and s-domain representations side-by-side with the same parameter values. SDomainAnalysis page simplified to theory-only (2 tabs) since the interactive part now lives in the lab.
+
 ### 2026-03-01 — Frontend design skill (adapted)
 **Decision**: Install Anthropic's `frontend-design` plugin skill, adapted for educational context.
 **Reason**: The original skill pushes toward bold, "unforgettable" aesthetics that can compete with STEM learning content. Adapted version channels creative energy into micro-interactions, visual hierarchy, state transitions, and data visualization polish — areas that enhance student engagement without sacrificing clarity.

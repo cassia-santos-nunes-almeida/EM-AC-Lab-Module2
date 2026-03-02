@@ -31,8 +31,17 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] Dark mode for Tabs, Overview, chart tooltips, DurationControl, page loader
 - [x] Mobile AI Tutor access (floating action button)
 - [x] Scroll-to-top on route navigation
+- [x] CollapsibleSection shared component (progressive disclosure pattern)
+- [x] ChallengeCard component with auto-check and hints
+- [x] ConceptCheck component (multiple-choice + predict-reveal modes)
+- [x] SDomainPanel with transfer function, pole-zero map, damping indicator
+- [x] InteractiveLab: S-Domain toggle, guided challenges (4), concept check, collapsible sections
+- [x] SDomainAnalysis simplified to theory-only (2 tabs: Theory + Damping & Takeaways)
+- [x] TimeDomain: collapsible sections + concept checks for RC/RL/RLC
+- [x] ComponentPhysics: collapsible material sections
+- [x] ComponentPhysics dark mode fix (61 locations)
+- [x] Sidebar + Overview labels updated
 
 ## Next
 - Component-level tests (React Testing Library)
-- Further decomposition of large components (TimeDomain, ComponentPhysics)
 - PWA offline improvements
