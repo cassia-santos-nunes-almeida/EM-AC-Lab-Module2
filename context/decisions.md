@@ -4,6 +4,22 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
+### 2026-03-02 — Page-level integration tests
+**Decision**: Add 13 integration tests covering full page rendering, tab/tablist switching, concept check interaction, collapsible section state, and TOC presence across ComponentPhysics, TimeDomain, and SDomainAnalysis.
+**Reason**: Component-level tests cover individual widgets, but page-level tests catch integration issues (e.g., duplicate text collisions between headings and navigation, ARIA attribute propagation through composed components). Uses role-based queries (`getByRole`) to avoid fragile text matching.
+
+### 2026-03-02 — Comprehensive accessibility audit
+**Decision**: Add WAI-ARIA patterns across all interactive components: `role="tablist/tab/tabpanel"` with `aria-selected`, `aria-controls`, `aria-labelledby` on Tabs; `role="dialog"` + Escape key dismiss on floating AiTutor; `role="progressbar"` on Sidebar; `role="region"` + `aria-controls` on CollapsibleSection; `role="group"` + `aria-live="polite"` on ConceptCheck; skip-to-content link in Layout.
+**Reason**: Screen reader users need semantic landmarks and live region announcements. Roving `tabIndex` with Arrow key navigation on tabs follows WAI-ARIA Authoring Practices. `aria-live="polite"` ensures new chat messages and feedback are announced without interrupting.
+
+### 2026-03-02 — Vendor chunk splitting with manualChunks
+**Decision**: Split vendor bundles via Rollup `manualChunks`: vendor-react (46KB), vendor-recharts (366KB), vendor-katex (265KB), vendor-gemini (19KB).
+**Reason**: Build produced 574KB and 411KB chunks exceeding Vite's 500KB warning. Splitting allows browsers to cache stable vendor code independently from app code, improving repeat-visit load times.
+
+### 2026-03-02 — Shared useOnlineStatus hook
+**Decision**: Extract `useOnlineStatus` from duplicated implementations in AiTutor and Layout into `src/hooks/useOnlineStatus.ts`.
+**Reason**: Both components had identical `useSyncExternalStore` + `online`/`offline` event listener code. Single hook eliminates duplication and establishes the `src/hooks/` directory pattern.
+
 ### 2026-03-02 — Scroll-to-section with TableOfContents
 **Decision**: Create a reusable `TableOfContents` component with pill-style jump links. Add to TimeDomain (Circuit Analysis) page only.
 **Reason**: TimeDomain has multiple vertically stacked sections that benefit from quick navigation. Other pages (ComponentPhysics, SDomainAnalysis, LaplaceTheory) use tab-based layouts where a TOC adds no value. Uses `scrollIntoView({ behavior: 'smooth' })` with `scroll-mt-4` for proper offset.
