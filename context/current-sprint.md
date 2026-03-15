@@ -15,8 +15,8 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] Shared types extracted (CircuitType, DampingType, classifyDamping)
 - [x] Code-split routes with React.lazy (566 KB main bundle, down from 1,059 KB)
 - [x] eslint-plugin-jsx-a11y added and accessibility issue fixed
-- [x] Zustand progress store with localStorage persistence
-- [x] Sidebar progress bar and visited-module indicators
+- [x] ~~Zustand progress store~~ — removed (visit-tracking ≠ learning; simplified to theme-only store)
+- [x] ~~Sidebar progress bar and visited-module indicators~~ — removed
 - [x] Dark mode support with theme store and class-based toggling
 - [x] Tailwind v4 migration — deleted tailwind.config.js, use CSS @theme
 - [x] Global CSS cleanup — removed conflicting h1-h4/p styles
@@ -54,7 +54,7 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] Scroll-to-section — TableOfContents component with pill-style jump links on Circuit Analysis page
 - [x] Shared `useOnlineStatus` hook extracted from duplicated code in AiTutor + Layout
 - [x] Vendor chunk splitting — manualChunks for react, recharts, katex, gemini (eliminated 500KB+ warning)
-- [x] Comprehensive accessibility audit — ARIA tab pattern, roving tabIndex, aria-live regions, skip-to-content, role="dialog", role="progressbar", role="region", role="group"
+- [x] Comprehensive accessibility audit — ARIA tab pattern, roving tabIndex, aria-live regions, skip-to-content, role="dialog", role="region", role="group"
 - [x] Page-level integration tests — 13 tests for ComponentPhysics, TimeDomain, SDomainAnalysis (78 total tests)
 
 ## Next
