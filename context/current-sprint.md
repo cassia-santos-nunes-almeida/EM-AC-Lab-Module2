@@ -57,6 +57,16 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] Comprehensive accessibility audit — ARIA tab pattern, roving tabIndex, aria-live regions, skip-to-content, role="dialog", role="region", role="group"
 - [x] Page-level integration tests — 13 tests for ComponentPhysics, TimeDomain, SDomainAnalysis (78 total tests)
 
+- [x] Cross-module audit implementation (2026-03-15):
+  - [x] Added progress persistence via useProgressStore (persisted to `emac-m2-progress`)
+  - [x] Unified dark mode to shared `emac-theme` localStorage key
+  - [x] Added cross-module URL env vars and `src/constants/modules.ts`
+  - [x] Added FVT stability caveat in LaplaceTheory properties table
+  - [x] Added iron permeability note in componentMath.ts MaterialProperty
+  - [x] Created Laplace "feel the pain" motivation demo (LaplaceMotivation component)
+  - [x] Created KVL/KCL multiple-choice exercise (CircuitAnalysisExercise component)
+  - [x] All 78 tests passing, build clean
+
 ## Next
 - SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)
 - Additional TOC on ComponentPhysics page (currently tab-based, may not need it)
