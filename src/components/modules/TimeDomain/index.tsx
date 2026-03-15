@@ -212,10 +212,9 @@ function RCCircuitComparison() {
       correctReveal={
         <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
           <p>With R = 200 Ω, C = 10 μF:</p>
-          <MathWrapper formula="\tau = RC = 200 \times 10\mu\text{F} = 2\text{ ms}" block />
-          <p>The s-domain pole shifts from s = −500 to s = −1/τ = −500 → s = −500 with old R, now:</p>
-          <MathWrapper formula="s = -\frac{1}{\tau} = -\frac{1}{2\text{ ms}} = -500 \text{ rad/s} \to -500 \text{ (was)} \to \text{now } -\frac{1}{0.002} = -500" block />
-          <p className="font-medium">The pole moves closer to the origin — the circuit responds more slowly.</p>
+          <MathWrapper formula="\tau_{\text{new}} = RC = 200 \times 10\,\mu\text{F} = 2\text{ ms} \quad (\text{was } 1\text{ ms})" block />
+          <MathWrapper formula="s_{\text{pole}} = -\frac{1}{\tau} = -\frac{1}{0.002} = -500\text{ rad/s} \quad (\text{was } -1000\text{ rad/s})" block />
+          <p className="font-medium">The pole moves from s = −1000 to s = −500 (closer to the origin) — the circuit responds more slowly.</p>
         </div>
       }
     />
@@ -491,16 +490,16 @@ function RLCCircuitComparison() {
       scenario="Now consider the same RLC circuit but with C halved. R and L stay the same."
       question="How does halving C affect the natural frequency ω₀ and the damping ratio ζ?"
       options={[
-        { text: 'ω₀ increases by √2; ζ increases', correct: true, explanation: 'Correct! ω₀ = 1/√(LC) — halving C increases ω₀ by √2. Since ζ = R/(2√(L/C)) and C decreases, √(L/C) increases, so ζ increases too.' },
-        { text: 'ω₀ doubles; ζ stays the same', correct: false, explanation: 'ω₀ = 1/√(LC), so halving C increases ω₀ by √2, not by 2. And ζ = R/(2√(L/C)) also changes because it depends on C.' },
-        { text: 'ω₀ decreases; ζ decreases', correct: false, explanation: 'Halving C makes LC smaller, which increases ω₀ = 1/√(LC). Both ω₀ and ζ increase.' },
-        { text: 'ω₀ increases by √2; ζ stays the same', correct: false, explanation: 'ω₀ is correct, but ζ = R/(2√(L/C)) depends on C through √(L/C). Halving C increases ζ.' },
+        { text: 'ω₀ increases by √2; ζ decreases', correct: true, explanation: 'Correct! ω₀ = 1/√(LC) — halving C increases ω₀ by √2. Since ζ = R√C/(2√L), halving C decreases ζ by √2. The system oscillates faster and is less damped.' },
+        { text: 'ω₀ doubles; ζ stays the same', correct: false, explanation: 'ω₀ = 1/√(LC), so halving C increases ω₀ by √2, not by 2. And ζ = R√C/(2√L) also changes because it depends on √C.' },
+        { text: 'ω₀ decreases; ζ decreases', correct: false, explanation: 'Halving C makes LC smaller, which increases ω₀ = 1/√(LC). The ζ part is right though — ζ = R√C/(2√L) decreases when C decreases.' },
+        { text: 'ω₀ increases by √2; ζ increases', correct: false, explanation: 'ω₀ is correct, but ζ = R√C/(2√L) — since ζ depends on √C, halving C decreases ζ by √2, not increases it.' },
       ]}
       correctReveal={
         <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
           <MathWrapper formula="\omega_0 = \frac{1}{\sqrt{LC}} \to \frac{1}{\sqrt{L \cdot C/2}} = \sqrt{2} \cdot \omega_{0,\text{old}}" block />
-          <MathWrapper formula="\zeta = \frac{R}{2\sqrt{L/C}} \to \frac{R}{2\sqrt{L/(C/2)}} = \frac{R}{2} \cdot \sqrt{\frac{2}{LC}} \cdot \frac{1}{\sqrt{2}} \cdot \sqrt{2} = \sqrt{2}\;\zeta_{\text{old}}" block />
-          <p className="font-medium">Halving C pushes both the natural frequency and damping ratio up by a factor of √2. The system oscillates faster and is more damped.</p>
+          <MathWrapper formula="\zeta = \frac{R}{2}\sqrt{\frac{C}{L}} \to \frac{R}{2}\sqrt{\frac{C/2}{L}} = \frac{\zeta_{\text{old}}}{\sqrt{2}}" block />
+          <p className="font-medium">Halving C increases ω₀ by √2 but decreases ζ by √2. The system oscillates faster and is less damped — it may even cross from overdamped to underdamped!</p>
         </div>
       }
     />

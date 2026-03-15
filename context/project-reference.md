@@ -45,8 +45,8 @@ Detailed technical reference. For quick context, see `CLAUDE.md` instead.
 ### Guided Learning Path
 Overview → Component Physics → Circuit Analysis → Laplace Theory → S-Domain Analysis → Interactive Lab
 
-### AI Tutoring
-Click "AI Circuit Tutor" → Enter Gemini API key → Chat with LaTeX-formatted responses → Persists across page navigation
+### Think it Through (Socratic Tutor)
+Click "Think it Through" → Enter Gemini API key → Guided Socratic dialogue with LaTeX-formatted responses → Persists across page navigation
 
 ### Interactive Circuit Simulation
 Select circuit type (RC/RL/RLC) → Toggle input (Step/Impulse) → Adjust sliders → See live charts + equations + analysis
