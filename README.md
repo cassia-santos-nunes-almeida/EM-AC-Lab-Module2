@@ -2,7 +2,7 @@
 
 An interactive learning platform for analog circuit analysis. Built for students taking introductory circuit theory courses at LUT University. This is the second module in the **EM&AC Lab** three-module course.
 
-**Live Demo:** https://cassia-santos-nunes-almeida.github.io/EM-AC-Lab-Module/
+**Live Demo:** https://em-ac-lab-module.vercel.app/
 
 ## Course Structure
 
@@ -10,9 +10,9 @@ This app is part of a three-module progressive learning sequence:
 
 | Module | Focus | Description |
 |---|---|---|
-| [Module 1](https://cassia-santos-nunes-almeida.github.io/EM-AC-Lab-Module1) | Electromagnetic Fundamentals | Maxwell's equations, field laws, EM waves, magnetic circuits |
+| [Module 1](https://em-ac-lab-module1.vercel.app/) | Electromagnetic Fundamentals | Maxwell's equations, field laws, EM waves, magnetic circuits |
 | **Module 2 (this app)** | Circuit Analysis | Component physics, time/s-domain analysis, Laplace transforms |
-| [Module 3](https://cassia-santos-nunes-almeida.github.io/EM-AC-Lab-Module3) | Transmission Lines & Antennas | Coupled coils, transmission line theory, Smith chart, antennas |
+| [Module 3](https://em-ac-lab-module3.vercel.app/) | Transmission Lines & Antennas | Coupled coils, transmission line theory, Smith chart, antennas |
 
 **Module 1 → Module 2:** Magnetic circuits, mutual inductance, and phasor concepts from Module 1 provide the physical foundation for circuit analysis here. **Module 2 → Module 3:** The Laplace transform techniques and impedance concepts mastered here are essential for transmission line analysis in Module 3.
 
