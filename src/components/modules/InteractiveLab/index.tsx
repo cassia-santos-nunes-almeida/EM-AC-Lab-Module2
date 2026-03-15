@@ -13,6 +13,9 @@ import { CircuitDiagram } from './CircuitDiagram';
 import { SDomainPanel } from './SDomainPanel';
 import { getChallenges } from './challenges';
 import { useThemeStore } from '../../../store/progressStore';
+import { SectionHook } from '../../common/SectionHook';
+import { PredictionGate } from '../../common/PredictionGate';
+import { classifyDamping } from '../../../types/circuit';
 
 /** Circuit equations panel showing formulas for the selected circuit/input type (F24). */
 function CircuitEquations({ circuitType, inputType, response }: {
@@ -211,6 +214,7 @@ function RLCAnalysisPanel({ response, timeConstantMs }: {
           <p className="text-lg font-bold text-engineering-blue-700 dark:text-engineering-blue-400 mt-0.5">
             {response.omega0?.toFixed(2)} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">rad/s</span>
           </p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 italic mt-1">If you doubled both L and C, what happens to ω₀? Try it.</p>
         </div>
 
         <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3">
@@ -218,6 +222,7 @@ function RLCAnalysisPanel({ response, timeConstantMs }: {
           <p className="text-lg font-bold text-engineering-blue-700 dark:text-engineering-blue-400 mt-0.5">
             {response.zeta?.toFixed(4)}
           </p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 italic mt-1">Is this value in the range you'd expect physically?</p>
         </div>
 
         <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3">
@@ -225,6 +230,7 @@ function RLCAnalysisPanel({ response, timeConstantMs }: {
           <p className="text-lg font-bold text-green-700 dark:text-green-400 mt-0.5">
             {timeConstantMs.toFixed(3)} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">ms</span>
           </p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 italic mt-1">How many time constants until the response reaches 99% of its final value? Does the simulation confirm that?</p>
         </div>
 
         {response.dampingType === 'underdamped' && response.omega0 && response.zeta && (
@@ -255,6 +261,7 @@ function FirstOrderAnalysisPanel({ circuitType, response, R, L, C }: {
         <p className="text-xl font-bold text-engineering-blue-700 dark:text-engineering-blue-400 mt-0.5">
           {response.timeConstant ? (response.timeConstant * 1000).toFixed(3) : '—'} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">ms</span>
         </p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 italic mt-1">How many time constants until the response reaches 99% of its final value? Does the simulation confirm that?</p>
       </div>
 
       <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3">
@@ -374,6 +381,12 @@ export function InteractiveLab() {
     [circuitType, inputType, dR, dL, dC],
   );
 
+  // PredictionGate: quantize R/L/C to 20% buckets so the gate re-triggers on significant changes
+  const predictionResetKey = useMemo(() => {
+    const bucket = (v: number) => Math.round(Math.log(v) / Math.log(1.2));
+    return `${bucket(dR)}-${bucket(dL)}-${bucket(dC)}`;
+  }, [dR, dL, dC]);
+
   const handleReset = () => {
     setR(100);
     setL(0.1);
@@ -383,8 +396,121 @@ export function InteractiveLab() {
     setAutoDuration(false);
   };
 
+  const predictionGateOptions = [
+    {
+      id: 'overdamped',
+      label: 'Overdamped',
+      visual: (
+        <svg viewBox="0 0 120 60" className="w-full h-12">
+          <path d="M 5 55 Q 30 55 50 20 Q 65 8 80 6 L 115 5" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-600 dark:text-slate-300" />
+          <line x1="5" y1="5" x2="115" y2="5" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" className="text-slate-300 dark:text-slate-600" />
+        </svg>
+      ),
+    },
+    {
+      id: 'critically-damped',
+      label: 'Critically damped',
+      visual: (
+        <svg viewBox="0 0 120 60" className="w-full h-12">
+          <path d="M 5 55 Q 20 55 35 10 Q 45 3 60 5 L 115 5" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-600 dark:text-slate-300" />
+          <line x1="5" y1="5" x2="115" y2="5" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" className="text-slate-300 dark:text-slate-600" />
+        </svg>
+      ),
+    },
+    {
+      id: 'underdamped',
+      label: 'Underdamped',
+      visual: (
+        <svg viewBox="0 0 120 60" className="w-full h-12">
+          <path d="M 5 55 Q 15 55 22 -5 Q 28 -5 35 12 Q 42 25 48 2 Q 54 -5 60 8 Q 66 15 72 4 Q 78 0 85 5 L 115 5" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-600 dark:text-slate-300" />
+          <line x1="5" y1="5" x2="115" y2="5" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" className="text-slate-300 dark:text-slate-600" />
+        </svg>
+      ),
+    },
+  ];
+
+  /** Chart + analysis panel rendered as ROW 3 */
+  const chartAndAnalysis = (
+    <div className="grid lg:grid-cols-[1fr_320px] gap-6">
+      {/* Left: Chart */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Response Visualization</h3>
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+              inputType === 'step' ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300'
+            }`}>
+              {inputType === 'step' ? 'Step Input u(t)' : 'Impulse Input \u03B4(t)'}
+            </span>
+          </div>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showVoltage} onChange={(e) => setShowVoltage(e.target.checked)} className="w-4 h-4 accent-blue-500" />
+              <span className="text-sm text-slate-700 dark:text-slate-300">Voltage</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showCurrent} onChange={(e) => setShowCurrent(e.target.checked)} className="w-4 h-4 accent-red-500" />
+              <span className="text-sm text-slate-700 dark:text-slate-300">Current</span>
+            </label>
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+            <XAxis dataKey="time" tick={{ fill: chartColors.text }} label={{ value: 'Time (ms)', position: 'insideBottom', offset: -5, fill: chartColors.text }} />
+            <YAxis tick={{ fill: chartColors.text }} label={{ value: 'Voltage (V) / Current (mA)', angle: -90, position: 'insideLeft', fill: chartColors.text }} />
+            <Tooltip content={({ payload, label }) => <ResponseChartTooltip payload={payload as Array<{ color?: string; name?: string; value?: string | number }>} label={label} />} />
+            <Legend wrapperStyle={{ color: chartColors.legend }} />
+            {/* Time constant marker */}
+            {timeConstantMs <= effectiveDuration * 1000 && (
+              <ReferenceLine
+                x={timeConstantMs}
+                stroke="#16a34a"
+                strokeWidth={1.5}
+                strokeDasharray="6 3"
+                label={{ value: '\u03C4', position: 'top', fill: '#16a34a', fontWeight: 'bold', fontSize: 14 }}
+              />
+            )}
+            {/* Damped period marker for underdamped RLC */}
+            {dampedPeriodMs && dampedPeriodMs <= effectiveDuration * 1000 && (
+              <ReferenceLine
+                x={dampedPeriodMs}
+                stroke="#7c3aed"
+                strokeWidth={1.5}
+                strokeDasharray="6 3"
+                label={{ value: 'T\u1D48', position: 'top', fill: '#7c3aed', fontWeight: 'bold', fontSize: 13 }}
+              />
+            )}
+            {showVoltage && (
+              <Line type="monotone" dataKey="voltage" stroke="#3b82f6" name="Voltage" dot={false} strokeWidth={2} animationDuration={500} animationEasing="ease-out" />
+            )}
+            {showCurrent && (
+              <Line type="monotone" dataKey="current" stroke="#ef4444" name="Current" dot={false} strokeWidth={2} animationDuration={500} animationEasing="ease-out" />
+            )}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Right: Analysis panel */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 flex flex-col">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Circuit Analysis</h2>
+
+        {circuitType === 'RLC' && response.dampingType && (
+          <RLCAnalysisPanel response={response} timeConstantMs={timeConstantMs} />
+        )}
+
+        {(circuitType === 'RC' || circuitType === 'RL') && (
+          <FirstOrderAnalysisPanel circuitType={circuitType} response={response} R={R} L={L} C={C} />
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
+      <SectionHook text="In 1926, the same mathematics used here predicted that a radio receiver's selectivity depended on the Q factor of its tank circuit. Engineers have been tuning poles ever since." />
+
       <div>
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Interactive Lab</h1>
         <p className="text-lg text-slate-600 dark:text-slate-400">
@@ -511,80 +637,29 @@ export function InteractiveLab() {
       )}
 
       {/* ROW 3: Chart + Analysis side by side */}
-      <div className="grid lg:grid-cols-[1fr_320px] gap-6">
-        {/* Left: Chart */}
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Response Visualization</h3>
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                inputType === 'step' ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300'
-              }`}>
-                {inputType === 'step' ? 'Step Input u(t)' : 'Impulse Input \u03B4(t)'}
-              </span>
+      {circuitType === 'RLC' && inputType === 'step' && response.zeta !== undefined ? (
+        <PredictionGate
+          question="With the current R, L, C values, what do you expect the step response to look like?"
+          options={predictionGateOptions}
+          getCorrectAnswer={() => classifyDamping(response.zeta!)}
+          explanation={
+            <div className="space-y-1">
+              <MathWrapper
+                formula={`\\zeta = \\frac{R}{2\\sqrt{L/C}} = \\frac{${dR}}{2\\sqrt{${dL}/${dC}}} = ${response.zeta!.toFixed(4)}`}
+                block
+              />
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                {response.zeta! < 1 ? 'ζ < 1 → underdamped (oscillation)' : response.zeta! > 1 ? 'ζ > 1 → overdamped (no oscillation)' : 'ζ ≈ 1 → critically damped (fastest, no overshoot)'}
+              </p>
             </div>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={showVoltage} onChange={(e) => setShowVoltage(e.target.checked)} className="w-4 h-4 accent-blue-500" />
-                <span className="text-sm text-slate-700 dark:text-slate-300">Voltage</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={showCurrent} onChange={(e) => setShowCurrent(e.target.checked)} className="w-4 h-4 accent-red-500" />
-                <span className="text-sm text-slate-700 dark:text-slate-300">Current</span>
-              </label>
-            </div>
-          </div>
-
-          <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-              <XAxis dataKey="time" tick={{ fill: chartColors.text }} label={{ value: 'Time (ms)', position: 'insideBottom', offset: -5, fill: chartColors.text }} />
-              <YAxis tick={{ fill: chartColors.text }} label={{ value: 'Voltage (V) / Current (mA)', angle: -90, position: 'insideLeft', fill: chartColors.text }} />
-              <Tooltip content={({ payload, label }) => <ResponseChartTooltip payload={payload as Array<{ color?: string; name?: string; value?: string | number }>} label={label} />} />
-              <Legend wrapperStyle={{ color: chartColors.legend }} />
-              {/* Time constant marker */}
-              {timeConstantMs <= effectiveDuration * 1000 && (
-                <ReferenceLine
-                  x={timeConstantMs}
-                  stroke="#16a34a"
-                  strokeWidth={1.5}
-                  strokeDasharray="6 3"
-                  label={{ value: '\u03C4', position: 'top', fill: '#16a34a', fontWeight: 'bold', fontSize: 14 }}
-                />
-              )}
-              {/* Damped period marker for underdamped RLC */}
-              {dampedPeriodMs && dampedPeriodMs <= effectiveDuration * 1000 && (
-                <ReferenceLine
-                  x={dampedPeriodMs}
-                  stroke="#7c3aed"
-                  strokeWidth={1.5}
-                  strokeDasharray="6 3"
-                  label={{ value: 'T\u1D48', position: 'top', fill: '#7c3aed', fontWeight: 'bold', fontSize: 13 }}
-                />
-              )}
-              {showVoltage && (
-                <Line type="monotone" dataKey="voltage" stroke="#3b82f6" name="Voltage" dot={false} strokeWidth={2} animationDuration={500} animationEasing="ease-out" />
-              )}
-              {showCurrent && (
-                <Line type="monotone" dataKey="current" stroke="#ef4444" name="Current" dot={false} strokeWidth={2} animationDuration={500} animationEasing="ease-out" />
-              )}
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Right: Analysis panel */}
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 flex flex-col">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Circuit Analysis</h2>
-
-          {circuitType === 'RLC' && response.dampingType && (
-            <RLCAnalysisPanel response={response} timeConstantMs={timeConstantMs} />
-          )}
-
-          {(circuitType === 'RC' || circuitType === 'RL') && (
-            <FirstOrderAnalysisPanel circuitType={circuitType} response={response} R={R} L={L} C={C} />
-          )}
-        </div>
-      </div>
+          }
+          resetKey={predictionResetKey}
+        >
+          {chartAndAnalysis}
+        </PredictionGate>
+      ) : (
+        chartAndAnalysis
+      )}
 
       {/* Concept check */}
       {circuitType === 'RLC' && (

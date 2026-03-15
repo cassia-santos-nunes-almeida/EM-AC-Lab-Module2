@@ -8,6 +8,7 @@ import {
 import { ResistorSection } from './ResistorSection';
 import { CapacitorSection } from './CapacitorSection';
 import { InductorSection } from './InductorSection';
+import { SectionHook } from '../../common/SectionHook';
 
 type ComponentType = 'resistor' | 'capacitor' | 'inductor';
 
@@ -33,6 +34,8 @@ export function ComponentPhysics() {
 
   return (
     <div className="space-y-8">
+      <SectionHook text="A 100μF capacitor and a 100μH inductor are physically very different objects — one stores energy in an electric field, one in a magnetic field. Yet in circuit equations they appear as near-mirror images of each other. Understanding why requires going inside the physics." />
+
       <div>
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Component Physics</h1>
         <p className="text-lg text-slate-600 dark:text-slate-400">

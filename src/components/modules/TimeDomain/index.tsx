@@ -8,6 +8,8 @@ import { circuitAnalysisFormulas } from '../../../utils/componentMath';
 import { CircuitComparisonLayout } from './CircuitComparisonLayout';
 import { MethodComparisonTable } from './MethodComparisonTable';
 import { ResponseComparisons } from './ResponseComparisons';
+import { SectionHook } from '../../common/SectionHook';
+import { YourTurnPanel } from '../../common/YourTurnPanel';
 
 import type { CircuitType } from '../../../types/circuit';
 
@@ -23,6 +25,8 @@ export function TimeDomain() {
 
   return (
     <div className="space-y-8">
+      <SectionHook text="The differential equation approach and the Laplace approach give identical answers. One takes three pages of algebra. The other takes three lines. This section shows both — and why engineers stopped using the first." />
+
       <div>
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Circuit Analysis</h1>
         <p className="text-lg text-slate-600 dark:text-slate-400">
@@ -89,6 +93,7 @@ export function TimeDomain() {
 
 function RCCircuitComparison() {
   return (
+    <>
     <CircuitComparisonLayout
       timeContent={<>
           <div>
@@ -196,11 +201,31 @@ function RCCircuitComparison() {
         </p>
       }
     />
+    <YourTurnPanel
+      scenario="Now consider the same RC circuit but with R doubled — 200 Ω instead of 100 Ω. The capacitance stays the same."
+      question="How does doubling R affect the time constant τ and the s-domain pole location?"
+      options={[
+        { text: 'τ doubles; the pole moves closer to the origin', correct: true, explanation: 'Correct! τ = RC, so doubling R doubles τ. The pole at s = −1/τ moves closer to zero, meaning slower decay.' },
+        { text: 'τ halves; the pole moves further from the origin', correct: false, explanation: 'That would be the case for an RL circuit where τ = L/R. For RC circuits, τ = RC — doubling R doubles τ.' },
+        { text: 'τ stays the same; only the gain changes', correct: false, explanation: 'The time constant τ = RC depends directly on R, so changing R changes τ.' },
+      ]}
+      correctReveal={
+        <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+          <p>With R = 200 Ω, C = 10 μF:</p>
+          <MathWrapper formula="\tau = RC = 200 \times 10\mu\text{F} = 2\text{ ms}" block />
+          <p>The s-domain pole shifts from s = −500 to s = −1/τ = −500 → s = −500 with old R, now:</p>
+          <MathWrapper formula="s = -\frac{1}{\tau} = -\frac{1}{2\text{ ms}} = -500 \text{ rad/s} \to -500 \text{ (was)} \to \text{now } -\frac{1}{0.002} = -500" block />
+          <p className="font-medium">The pole moves closer to the origin — the circuit responds more slowly.</p>
+        </div>
+      }
+    />
+    </>
   );
 }
 
 function RLCircuitComparison() {
   return (
+    <>
     <CircuitComparisonLayout
       timeContent={<>
           <div>
@@ -298,11 +323,29 @@ function RLCircuitComparison() {
         </p>
       }
     />
+    <YourTurnPanel
+      scenario="Now consider the same RL circuit but with R doubled — 200 Ω instead of 100 Ω. The inductance stays the same."
+      question="How does doubling R affect the time constant τ and the s-domain pole location?"
+      options={[
+        { text: 'τ halves; the pole moves further from the origin', correct: true, explanation: 'Correct! τ = L/R, so doubling R halves τ. The pole at s = −R/L moves further left, meaning faster decay — opposite to the RC case!' },
+        { text: 'τ doubles; the pole moves closer to the origin', correct: false, explanation: 'That would be the RC case where τ = RC. For RL circuits, τ = L/R — doubling R halves τ.' },
+        { text: 'τ stays the same; the pole doesn\'t move', correct: false, explanation: 'The time constant τ = L/R depends directly on R. Changing R always changes τ in an RL circuit.' },
+      ]}
+      correctReveal={
+        <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+          <p>With R = 200 Ω, L = 10 mH:</p>
+          <MathWrapper formula="\tau = \frac{L}{R} = \frac{10\text{ mH}}{200\;\Omega} = 0.05\text{ ms}" block />
+          <p className="font-medium">Doubling R in an RL circuit has the opposite effect to doubling R in an RC circuit — the RL circuit speeds up while the RC circuit slows down.</p>
+        </div>
+      }
+    />
+    </>
   );
 }
 
 function RLCCircuitComparison() {
   return (
+    <>
     <CircuitComparisonLayout
       timeContent={<>
           <div>
@@ -444,5 +487,23 @@ function RLCCircuitComparison() {
         </p>
       </>}
     />
+    <YourTurnPanel
+      scenario="Now consider the same RLC circuit but with C halved. R and L stay the same."
+      question="How does halving C affect the natural frequency ω₀ and the damping ratio ζ?"
+      options={[
+        { text: 'ω₀ increases by √2; ζ increases', correct: true, explanation: 'Correct! ω₀ = 1/√(LC) — halving C increases ω₀ by √2. Since ζ = R/(2√(L/C)) and C decreases, √(L/C) increases, so ζ increases too.' },
+        { text: 'ω₀ doubles; ζ stays the same', correct: false, explanation: 'ω₀ = 1/√(LC), so halving C increases ω₀ by √2, not by 2. And ζ = R/(2√(L/C)) also changes because it depends on C.' },
+        { text: 'ω₀ decreases; ζ decreases', correct: false, explanation: 'Halving C makes LC smaller, which increases ω₀ = 1/√(LC). Both ω₀ and ζ increase.' },
+        { text: 'ω₀ increases by √2; ζ stays the same', correct: false, explanation: 'ω₀ is correct, but ζ = R/(2√(L/C)) depends on C through √(L/C). Halving C increases ζ.' },
+      ]}
+      correctReveal={
+        <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+          <MathWrapper formula="\omega_0 = \frac{1}{\sqrt{LC}} \to \frac{1}{\sqrt{L \cdot C/2}} = \sqrt{2} \cdot \omega_{0,\text{old}}" block />
+          <MathWrapper formula="\zeta = \frac{R}{2\sqrt{L/C}} \to \frac{R}{2\sqrt{L/(C/2)}} = \frac{R}{2} \cdot \sqrt{\frac{2}{LC}} \cdot \frac{1}{\sqrt{2}} \cdot \sqrt{2} = \sqrt{2}\;\zeta_{\text{old}}" block />
+          <p className="font-medium">Halving C pushes both the natural frequency and damping ratio up by a factor of √2. The system oscillates faster and is more damped.</p>
+        </div>
+      }
+    />
+    </>
   );
 }

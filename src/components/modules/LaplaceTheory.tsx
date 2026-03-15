@@ -5,6 +5,7 @@ import { CollapsibleSection } from '../common/CollapsibleSection';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { laplaceTransforms, laplaceProperties } from '../../utils/componentMath';
 import { BookOpen, Zap as ZapIcon, ArrowRightLeft, Table2 } from 'lucide-react';
+import { SectionHook } from '../common/SectionHook';
 
 function TheoryTab() {
   return (
@@ -331,6 +332,8 @@ function ExamplesTab() {
 export function LaplaceTheory() {
   return (
     <div className="space-y-8">
+      <SectionHook text="Oliver Heaviside developed the operational calculus that became Laplace transforms in the 1880s, largely to analyze telegraph lines. He was self-taught, often wrong in his methods, and completely right in his results. The transform tables you use today are his legacy." />
+
       <div>
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Laplace Transform Theory</h1>
         <p className="text-lg text-slate-600 dark:text-slate-400">

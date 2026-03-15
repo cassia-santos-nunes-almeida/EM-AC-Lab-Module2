@@ -115,7 +115,9 @@ function LoadingDots() {
   );
 }
 
-const SYSTEM_INSTRUCTION = `You are a rigorous engineering tutor specializing in circuit analysis. Your role is to help students understand:
+const SYSTEM_INSTRUCTION = `You are a Socratic engineering tutor specializing in circuit analysis. Your job is to guide students toward understanding — never to give them the answer.
+
+Topics you cover:
 - Component physics (resistors, capacitors, inductors)
 - Constitutive laws: V=IR, I=C(dV/dt), V=L(dI/dt)
 - Time-domain differential equations for RC, RL, and RLC circuits
@@ -123,13 +125,15 @@ const SYSTEM_INSTRUCTION = `You are a rigorous engineering tutor specializing in
 - s-domain transfer functions, poles, and zeros
 - Damping ratios, natural frequency, and transient response
 
-Guidelines:
-1. Use LaTeX notation for all mathematical expressions. Enclose inline math in single $ signs and display math in double $$ signs.
-2. Provide detailed, step-by-step explanations to promote deep learning.
-3. Connect physical intuition with mathematical rigor.
-4. Only answer questions related to circuit analysis and electromagnetics.
-5. If asked about unrelated topics, politely redirect to circuit theory.
-6. Use proper engineering terminology and reference Nilsson & Riedel principles when appropriate.`;
+Rules:
+1. NEVER give a direct numerical answer to a circuit analysis question. Instead, ask a guiding question that leads the student toward the method.
+2. Always respond with a guiding question first. For example, if a student asks "why is this overdamped?", respond with "what do the pole locations tell you about the form of the solution?" — do not explain directly.
+3. When a student asks about a specific circuit behavior, ask about pole/zero locations first before discussing anything else.
+4. If the student appears stuck after two exchanges on the same topic, give a conceptual hint — not the answer. Point toward the relevant equation or relationship without solving it.
+5. Keep every response short: 3–5 sentences maximum.
+6. Refuse to solve circuit problems directly. Walk the student toward the method instead.
+7. Use LaTeX notation for all mathematical expressions. Enclose inline math in single $ signs and display math in double $$ signs.
+8. Only answer questions related to circuit analysis and electromagnetics. If asked about unrelated topics, politely redirect to circuit theory.`;
 
 /** Parse $...$ and $$...$$ LaTeX delimiters into text/latex segments. */
 function parseLatex(text: string) {
@@ -194,7 +198,7 @@ export function AiTutor({ mode, onModeChange }: AiTutorProps) {
     setMessages([
       {
         role: 'assistant',
-        content: 'Hello! I\'m your Circuit Analysis tutor. I can help you understand concepts related to resistors, capacitors, inductors, time-domain analysis, Laplace transforms, and s-domain analysis. Ask me anything!'
+        content: 'Hello! I\'m here to help you think through circuit analysis problems — but I won\'t give you answers directly. Instead, I\'ll ask questions to guide your reasoning. What are you working on?'
       }
     ]);
   }, []);
@@ -275,7 +279,7 @@ export function AiTutor({ mode, onModeChange }: AiTutorProps) {
     >
       <div className="flex items-center gap-2 select-none">
         <MessageSquare className="w-4 h-4" />
-        <h3 className="font-semibold text-sm">AI Circuit Tutor</h3>
+        <h3 className="font-semibold text-sm">Think it Through</h3>
       </div>
       <div className="flex items-center gap-1">
         {isApiKeySet && (
@@ -327,7 +331,7 @@ export function AiTutor({ mode, onModeChange }: AiTutorProps) {
       {!isOnline && (
         <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs font-medium">
           <WifiOff className="w-3.5 h-3.5 shrink-0" />
-          You are offline — AI Tutor requires an internet connection.
+          You are offline — Think it Through requires an internet connection.
         </div>
       )}
       <div aria-live="polite" aria-relevant="additions" className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -394,7 +398,7 @@ export function AiTutor({ mode, onModeChange }: AiTutorProps) {
     return (
       <div
         role="dialog"
-        aria-label="AI Circuit Tutor"
+        aria-label="Think it Through"
         className={`fixed z-[100] bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col overflow-hidden`}
         style={{
           width: FLOAT_WIDTH,
