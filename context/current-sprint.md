@@ -1,9 +1,9 @@
 # Current Sprint
 
 ## Goal
-Code quality, UX polish, and student experience — dark mode, responsive layout, component architecture, testing, performance.
+Feature completeness and reusability — extract shareable URL/chart export patterns, extend to other modules, consider meaningful progress tracking.
 
-## Status
+## Completed (previous sprint)
 - [x] Initial repo created from audited branch
 - [x] CLAUDE.md written
 - [x] CI/CD pipeline configured
@@ -63,7 +63,12 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] Chart export — Download PNG button on response visualization
 - [x] Copy shareable link button on response visualization
 
-## Next
-- SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)
-- Additional TOC on ComponentPhysics page (currently tab-based, may not need it)
-- Consider keyboard shortcut hints in AiTutor
+## Next (this sprint)
+- [ ] Extract `useShareableParams` hook — generic URL param sync (used by InteractiveLab, extend to ComponentPhysics)
+- [ ] Extract `ChartToolbar` or `useChartExport` hook — reusable chart download + copy link buttons
+- [ ] ComponentPhysics: shareable URLs for slider state (resistor geometry, capacitor geometry, inductor geometry)
+- [ ] TimeDomain: shareable URL for active circuit tab; chart export on response comparison chart
+- [ ] SDomainAnalysis: chart export on pole-zero scatter plot
+- [ ] Meaningful progress tracking — based on completed challenges/concept checks, not page visits (see decisions.md)
+- [ ] SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)
+- [ ] Consider keyboard shortcut hints in AiTutor
