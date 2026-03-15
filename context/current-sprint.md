@@ -59,6 +59,9 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 
 - [x] Concept checks added to ComponentPhysics (resistor, capacitor, inductor — one multiple-choice per tab)
 - [x] Module Summary "Review" tab on Overview page (big picture, key connections, self-assessment checklist)
+- [x] Shareable lab links — URL search params sync for circuit type, input, R, L, C, V
+- [x] Chart export — Download PNG button on response visualization
+- [x] Copy shareable link button on response visualization
 
 ## Next
 - SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)

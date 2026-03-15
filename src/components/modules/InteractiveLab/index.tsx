@@ -1,5 +1,7 @@
-import { useState, useMemo, useDeferredValue } from 'react';
+import { useState, useMemo, useDeferredValue, useCallback, useRef, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { Download, Link2 } from 'lucide-react';
 import { calculateCircuitResponse, calculateTransferFunction, type CircuitType, type InputType, type CircuitResponse } from '../../../utils/circuitSolver';
 import { dampingLabel } from '../../../types/circuit';
 import { MathWrapper } from '../../common/MathWrapper';
@@ -291,18 +293,87 @@ function FirstOrderAnalysisPanel({ circuitType, response, R, L, C }: {
   );
 }
 
+const CIRCUIT_TYPES: CircuitType[] = ['RC', 'RL', 'RLC'];
+const INPUT_TYPES: InputType[] = ['step', 'impulse'];
+
+function clampNum(raw: string | null, min: number, max: number, fallback: number): number {
+  if (raw === null) return fallback;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.max(min, Math.min(max, n));
+}
+
 export function InteractiveLab() {
-  const [circuitType, setCircuitType] = useState<CircuitType>('RLC');
-  const [inputType, setInputType] = useState<InputType>('step');
-  const [R, setR] = useState(100);
-  const [L, setL] = useState(0.1);
-  const [C, setC] = useState(0.0001);
-  const [voltage, setVoltage] = useState(10);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [circuitType, setCircuitType] = useState<CircuitType>(() => {
+    const ct = searchParams.get('circuit');
+    return ct && CIRCUIT_TYPES.includes(ct as CircuitType) ? ct as CircuitType : 'RLC';
+  });
+  const [inputType, setInputType] = useState<InputType>(() => {
+    const it = searchParams.get('input');
+    return it && INPUT_TYPES.includes(it as InputType) ? it as InputType : 'step';
+  });
+  const [R, setR] = useState(() => clampNum(searchParams.get('R'), 1, 10000, 100));
+  const [L, setL] = useState(() => clampNum(searchParams.get('L'), 0.001, 1, 0.1));
+  const [C, setC] = useState(() => clampNum(searchParams.get('C'), 1e-6, 1e-3, 0.0001));
+  const [voltage, setVoltage] = useState(() => clampNum(searchParams.get('V'), 1, 50, 10));
   const [duration, setDuration] = useState(0.01);
   const [autoDuration, setAutoDuration] = useState(false);
   const [showCurrent, setShowCurrent] = useState(true);
   const [showVoltage, setShowVoltage] = useState(true);
   const [showSDomain, setShowSDomain] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  // Sync state → URL params (debounced to avoid thrashing during slider drag)
+  const dRForUrl = useDeferredValue(R);
+  const dLForUrl = useDeferredValue(L);
+  const dCForUrl = useDeferredValue(C);
+  const dVForUrl = useDeferredValue(voltage);
+  useEffect(() => {
+    setSearchParams({
+      circuit: circuitType,
+      input: inputType,
+      R: String(dRForUrl),
+      L: String(dLForUrl),
+      C: String(dCForUrl),
+      V: String(dVForUrl),
+    }, { replace: true });
+  }, [circuitType, inputType, dRForUrl, dLForUrl, dCForUrl, dVForUrl, setSearchParams]);
+
+  const handleCopyLink = useCallback(() => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    });
+  }, []);
+
+  const handleDownloadChart = useCallback(() => {
+    const container = chartRef.current;
+    if (!container) return;
+    const svg = container.querySelector('svg.recharts-surface');
+    if (!svg) return;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    const rect = svg.getBoundingClientRect();
+    canvas.width = rect.width * 2;
+    canvas.height = rect.height * 2;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.scale(2, 2);
+    const img = new Image();
+    img.onload = () => {
+      ctx.fillStyle = document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      const a = document.createElement('a');
+      a.download = `${circuitType}-${inputType}-response.png`;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    };
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
+  }, [circuitType, inputType]);
 
   const isDark = useThemeStore((s) => s.theme) === 'dark';
   const chartColors = {
@@ -387,14 +458,14 @@ export function InteractiveLab() {
     return `${bucket(dR)}-${bucket(dL)}-${bucket(dC)}`;
   }, [dR, dL, dC]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setR(100);
     setL(0.1);
     setC(0.0001);
     setVoltage(10);
     setDuration(0.01);
     setAutoDuration(false);
-  };
+  }, []);
 
   const predictionGateOptions = [
     {
@@ -443,18 +514,41 @@ export function InteractiveLab() {
               {inputType === 'step' ? 'Step Input u(t)' : 'Impulse Input \u03B4(t)'}
             </span>
           </div>
-          <div className="flex gap-4">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={showVoltage} onChange={(e) => setShowVoltage(e.target.checked)} className="w-4 h-4 accent-blue-500" />
-              <span className="text-sm text-slate-700 dark:text-slate-300">Voltage</span>
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={showCurrent} onChange={(e) => setShowCurrent(e.target.checked)} className="w-4 h-4 accent-red-500" />
-              <span className="text-sm text-slate-700 dark:text-slate-300">Current</span>
-            </label>
+          <div className="flex items-center gap-3">
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={showVoltage} onChange={(e) => setShowVoltage(e.target.checked)} className="w-4 h-4 accent-blue-500" />
+                <span className="text-sm text-slate-700 dark:text-slate-300">Voltage</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={showCurrent} onChange={(e) => setShowCurrent(e.target.checked)} className="w-4 h-4 accent-red-500" />
+                <span className="text-sm text-slate-700 dark:text-slate-300">Current</span>
+              </label>
+            </div>
+            <div className="flex gap-1.5 border-l border-slate-200 dark:border-slate-600 pl-3">
+              <button
+                onClick={handleDownloadChart}
+                className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                title="Download chart as PNG"
+              >
+                <Download className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleCopyLink}
+                className={`p-1.5 rounded-md transition-colors ${
+                  linkCopied
+                    ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30'
+                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                }`}
+                title={linkCopied ? 'Link copied!' : 'Copy shareable link'}
+              >
+                <Link2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
+        <div ref={chartRef}>
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -490,6 +584,7 @@ export function InteractiveLab() {
             )}
           </LineChart>
         </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Right: Analysis panel */}

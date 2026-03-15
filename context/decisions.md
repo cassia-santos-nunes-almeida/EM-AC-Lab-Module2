@@ -4,6 +4,10 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
+### 2026-03-15 — Shareable lab links and chart export
+**Decision**: Sync InteractiveLab state (circuit type, input type, R, L, C, V) to URL search params via `useSearchParams`. Add Download PNG (SVG→Canvas→PNG via XMLSerializer) and Copy Link buttons to the chart header.
+**Reason**: Students need to share specific circuit configurations with classmates/teachers for discussion, and export charts for lab reports. URL params use `replace: true` to avoid polluting browser history. Deferred values prevent URL thrashing during slider drag.
+
 ### 2026-03-15 — ComponentPhysics concept checks and Overview review tab
 **Decision**: Add one multiple-choice ConceptCheck per ComponentPhysics tab (resistor: area/resistance relationship, capacitor: dielectric effect, inductor: N² scaling). Add "Review" tab to Overview with cross-module connections and self-assessment checklist.
 **Reason**: ComponentPhysics was the only module without active recall. The review tab gives students a place to consolidate understanding and self-assess readiness. All formulas cross-checked against standard references (HyperPhysics, Wikipedia, MIT OCW, Engineering Toolbox, LibreTexts).
