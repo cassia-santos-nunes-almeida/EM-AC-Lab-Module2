@@ -57,6 +57,9 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] Comprehensive accessibility audit — ARIA tab pattern, roving tabIndex, aria-live regions, skip-to-content, role="dialog", role="region", role="group"
 - [x] Page-level integration tests — 13 tests for ComponentPhysics, TimeDomain, SDomainAnalysis (78 total tests)
 
+- [x] Concept checks added to ComponentPhysics (resistor, capacitor, inductor — one multiple-choice per tab)
+- [x] Module Summary "Review" tab on Overview page (big picture, key connections, self-assessment checklist)
+
 ## Next
 - SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)
 - Additional TOC on ComponentPhysics page (currently tab-based, may not need it)

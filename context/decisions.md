@@ -4,6 +4,10 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
+### 2026-03-15 — ComponentPhysics concept checks and Overview review tab
+**Decision**: Add one multiple-choice ConceptCheck per ComponentPhysics tab (resistor: area/resistance relationship, capacitor: dielectric effect, inductor: N² scaling). Add "Review" tab to Overview with cross-module connections and self-assessment checklist.
+**Reason**: ComponentPhysics was the only module without active recall. The review tab gives students a place to consolidate understanding and self-assess readiness. All formulas cross-checked against standard references (HyperPhysics, Wikipedia, MIT OCW, Engineering Toolbox, LibreTexts).
+
 ### 2026-03-15 — Remove progress tracking (visit-based)
 **Decision**: Remove `useProgressStore`, sidebar progress bar, and visited-module checkmark indicators. Keep `useThemeStore` in `progressStore.ts`.
 **Reason**: Visiting a page is not the same as learning from it. The progress bar gave a false sense of completion. Sidebar now shows clean navigation icons without visit state. If progress tracking returns, it should be based on meaningful signals (e.g., completed challenges, answered concept checks).
