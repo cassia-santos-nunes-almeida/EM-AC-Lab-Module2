@@ -4,12 +4,18 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
+### 2026-03-15 — Remove progress tracking (visit-based)
+**Decision**: Remove `useProgressStore`, sidebar progress bar, and visited-module checkmark indicators. Keep `useThemeStore` in `progressStore.ts`.
+**Reason**: Visiting a page is not the same as learning from it. The progress bar gave a false sense of completion. Sidebar now shows clean navigation icons without visit state. If progress tracking returns, it should be based on meaningful signals (e.g., completed challenges, answered concept checks).
+
+---
+
 ### 2026-03-02 — Page-level integration tests
 **Decision**: Add 13 integration tests covering full page rendering, tab/tablist switching, concept check interaction, collapsible section state, and TOC presence across ComponentPhysics, TimeDomain, and SDomainAnalysis.
 **Reason**: Component-level tests cover individual widgets, but page-level tests catch integration issues (e.g., duplicate text collisions between headings and navigation, ARIA attribute propagation through composed components). Uses role-based queries (`getByRole`) to avoid fragile text matching.
 
 ### 2026-03-02 — Comprehensive accessibility audit
-**Decision**: Add WAI-ARIA patterns across all interactive components: `role="tablist/tab/tabpanel"` with `aria-selected`, `aria-controls`, `aria-labelledby` on Tabs; `role="dialog"` + Escape key dismiss on floating AiTutor; `role="progressbar"` on Sidebar; `role="region"` + `aria-controls` on CollapsibleSection; `role="group"` + `aria-live="polite"` on ConceptCheck; skip-to-content link in Layout.
+**Decision**: Add WAI-ARIA patterns across all interactive components: `role="tablist/tab/tabpanel"` with `aria-selected`, `aria-controls`, `aria-labelledby` on Tabs; `role="dialog"` + Escape key dismiss on floating AiTutor; `role="region"` + `aria-controls` on CollapsibleSection; `role="group"` + `aria-live="polite"` on ConceptCheck; skip-to-content link in Layout.
 **Reason**: Screen reader users need semantic landmarks and live region announcements. Roving `tabIndex` with Arrow key navigation on tabs follows WAI-ARIA Authoring Practices. `aria-live="polite"` ensures new chat messages and feedback are announced without interrupting.
 
 ### 2026-03-02 — Vendor chunk splitting with manualChunks
@@ -99,10 +105,9 @@ Chronological log of key decisions. Newest at top.
 **Decision**: Sidebar uses CSS transform + transition for mobile (hidden by default), always visible on md+ breakpoint. Mobile header with hamburger menu.
 **Reason**: Students may use the app on tablets/phones. No external UI library needed — pure Tailwind CSS transitions.
 
-### 2026-03-01 — Add Zustand for progress tracking
-**Decision**: Use Zustand with `persist` middleware for student learning progress. Store in localStorage under `emac-progress`.
-**Reason**: Students need to see which modules they've visited. Zustand is minimal (1 KB), integrates cleanly, and the persist middleware handles localStorage automatically.
-**Alternatives considered**: Local useState (rejected — doesn't survive page refresh), Redux (overkill for this use case).
+### 2026-03-01 — Add Zustand for state persistence
+**Decision**: Use Zustand with `persist` middleware. Originally for progress tracking + theme; progress tracking removed 2026-03-15 (see above). Now theme-only.
+**Reason**: Zustand is minimal (1 KB), integrates cleanly, and the persist middleware handles localStorage automatically.
 
 ### 2026-03-01 — Extract shared types to src/types/circuit.ts
 **Decision**: Move CircuitType, DampingType, and damping classification into a single shared module.
@@ -129,9 +134,9 @@ Chronological log of key decisions. Newest at top.
 **Decision**: Created fresh repo `EM-AC-Lab-Module` from the audited state of the original `module2testBolt` project.
 **Reason**: Clean starting point with known technical debt documented. Old repo had accumulated drift.
 
-### Initial — Local-only state management (updated 2026-03-01)
-**Decision**: Component state via `useState`. Zustand only for cross-session persistence (progress tracking).
-**Reason**: App is a single-user learning tool. Most state is page-local. AI Tutor state lives in Layout. Zustand added later only for progress that must survive page refresh.
+### Initial — Local-only state management (updated 2026-03-15)
+**Decision**: Component state via `useState`. Zustand only for cross-session persistence (theme preference).
+**Reason**: App is a single-user learning tool. Most state is page-local. AI Tutor state lives in Layout. Zustand added for theme that must survive page refresh.
 
 ### Initial — Client-side Gemini API key
 **Decision**: Store Google Gemini API key in localStorage, call API directly from browser.
