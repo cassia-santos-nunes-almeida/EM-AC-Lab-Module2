@@ -4,8 +4,12 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
-### 2026-03-15 — Remove progress tracking (visit-based)
-**Decision**: Remove `useProgressStore`, sidebar progress bar, and visited-module checkmark indicators. Keep `useThemeStore` in `progressStore.ts`.
+### 2026-03-15 — Cross-module audit: unified theme + progress + pedagogical additions
+**Decision**: (1) Re-add `useProgressStore` with section-level tracking (visits, prediction gates, concept checks, hints) persisted to `emac-m2-progress`. (2) Unify dark mode to shared `emac-theme` key. (3) Add Laplace motivation demo, KVL/KCL exercise, FVT caveat, iron permeability note, cross-module URLs.
+**Reason**: Part of a cross-module audit aligning all three EM&AC Lab modules. Progress tracking now uses meaningful signals (concept checks, prediction gates) rather than visit-based tracking. Shared theme key provides consistent dark mode across modules.
+
+### 2026-03-15 — Remove visit-based progress tracking
+**Decision**: Remove visit-based `useProgressStore`, sidebar progress bar, and visited-module checkmark indicators. Keep `useThemeStore` in `progressStore.ts`.
 **Reason**: Visiting a page is not the same as learning from it. The progress bar gave a false sense of completion. Sidebar now shows clean navigation icons without visit state. If progress tracking returns, it should be based on meaningful signals (e.g., completed challenges, answered concept checks).
 
 ---
