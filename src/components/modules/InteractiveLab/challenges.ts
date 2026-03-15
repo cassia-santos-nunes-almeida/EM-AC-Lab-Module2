@@ -1,5 +1,5 @@
-import type { Challenge } from '../../common/ChallengeCard';
-import type { CircuitType, InputType } from '../../../types/circuit';
+import type { Challenge } from '@/components/common/ChallengeCard';
+import type { CircuitType, InputType } from '@/types/circuit';
 
 /**
  * Challenge definitions for the Interactive Lab.

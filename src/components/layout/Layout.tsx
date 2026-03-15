@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { MessageSquare, Menu, WifiOff } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { AiTutor, type TutorMode } from '../common/AiTutor';
-import { useOnlineStatus } from '../../hooks/useOnlineStatus';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 
 interface LayoutProps {
   children: ReactNode;

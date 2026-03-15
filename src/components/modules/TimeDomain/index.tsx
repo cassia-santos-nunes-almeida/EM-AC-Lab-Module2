@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
-import { MathWrapper } from '../../common/MathWrapper';
-import { CollapsibleSection } from '../../common/CollapsibleSection';
-import { ConceptCheck } from '../../common/ConceptCheck';
-import { ModuleNavigation } from '../../common/ModuleNavigation';
-import { TableOfContents } from '../../common/TableOfContents';
-import { circuitAnalysisFormulas } from '../../../utils/componentMath';
+import { MathWrapper } from '@/components/common/MathWrapper';
+import { CollapsibleSection } from '@/components/common/CollapsibleSection';
+import { ConceptCheck } from '@/components/common/ConceptCheck';
+import { ModuleNavigation } from '@/components/common/ModuleNavigation';
+import { TableOfContents } from '@/components/common/TableOfContents';
+import { circuitAnalysisFormulas } from '@/utils/componentMath';
 import { CircuitComparisonLayout } from './CircuitComparisonLayout';
 import { MethodComparisonTable } from './MethodComparisonTable';
 import { ResponseComparisons } from './ResponseComparisons';
-import { SectionHook } from '../../common/SectionHook';
-import { YourTurnPanel } from '../../common/YourTurnPanel';
-import { useProgressStore } from '../../../store/progressStore';
+import { SectionHook } from '@/components/common/SectionHook';
+import { YourTurnPanel } from '@/components/common/YourTurnPanel';
+import { useProgressStore } from '@/store/progressStore';
 import { CircuitAnalysisExercise } from '../CircuitAnalysisExercise';
 
-import type { CircuitType } from '../../../types/circuit';
+import type { CircuitType } from '@/types/circuit';
 
 const tocEntries = [
   { id: 'circuit-analysis', label: 'Circuit Analysis' },

@@ -4,10 +4,10 @@ import { Tabs } from '../common/Tabs';
 import { ConceptCheck } from '../common/ConceptCheck';
 import { CollapsibleSection } from '../common/CollapsibleSection';
 import { ModuleNavigation } from '../common/ModuleNavigation';
-import { laplaceTransforms, laplaceProperties } from '../../utils/componentMath';
+import { laplaceTransforms, laplaceProperties } from '@/utils/componentMath';
 import { BookOpen, Zap as ZapIcon, ArrowRightLeft, Table2 } from 'lucide-react';
 import { SectionHook } from '../common/SectionHook';
-import { useProgressStore } from '../../store/progressStore';
+import { useProgressStore } from '@/store/progressStore';
 import { LaplaceMotivation } from './LaplaceMotivation';
 
 function TheoryTab() {

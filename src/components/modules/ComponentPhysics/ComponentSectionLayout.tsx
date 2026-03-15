@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { CollapsibleSection } from '../../common/CollapsibleSection';
+import { CollapsibleSection } from '@/components/common/CollapsibleSection';
 
 /** Shared two-column layout for component sections (F13/F14). */
 export function ComponentSectionLayout({ theory, materialsTitle, materials, interactive }: {

@@ -10,9 +10,9 @@ import {
   Sun,
   ExternalLink,
 } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { useThemeStore } from '../../store/progressStore';
-import { MODULE_URLS } from '../../constants/modules';
+import { cn } from '@/utils/cn';
+import { useThemeStore } from '@/store/progressStore';
+import { MODULE_URLS } from '@/constants/modules';
 
 const navigationLinks = [
   { to: '/', icon: Home, label: 'Overview' },

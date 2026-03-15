@@ -1,9 +1,9 @@
-import { MathWrapper } from '../../common/MathWrapper';
+import { MathWrapper } from '@/components/common/MathWrapper';
 import { ComponentSectionLayout } from './ComponentSectionLayout';
 import {
   resistanceFormula,
   materials,
-} from '../../../utils/componentMath';
+} from '@/utils/componentMath';
 
 export function ResistorSection({
   length,

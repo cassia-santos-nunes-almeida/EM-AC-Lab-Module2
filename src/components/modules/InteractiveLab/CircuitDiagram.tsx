@@ -1,4 +1,4 @@
-import type { CircuitType } from '../../../types/circuit';
+import type { CircuitType } from '@/types/circuit';
 
 export function CircuitDiagram({ type, R, L, C, voltage }: { type: CircuitType; R: number; L: number; C: number; voltage: number }) {
   const wireColor = 'var(--circuit-wire)';
