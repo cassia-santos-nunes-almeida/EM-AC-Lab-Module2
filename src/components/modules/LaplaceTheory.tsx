@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { MathWrapper } from '../common/MathWrapper';
 import { Tabs } from '../common/Tabs';
 import { ConceptCheck } from '../common/ConceptCheck';
@@ -6,10 +7,14 @@ import { ModuleNavigation } from '../common/ModuleNavigation';
 import { laplaceTransforms, laplaceProperties } from '../../utils/componentMath';
 import { BookOpen, Zap as ZapIcon, ArrowRightLeft, Table2 } from 'lucide-react';
 import { SectionHook } from '../common/SectionHook';
+import { useProgressStore } from '../../store/progressStore';
+import { LaplaceMotivation } from './LaplaceMotivation';
 
 function TheoryTab() {
   return (
     <div className="space-y-6">
+      <LaplaceMotivation />
+
       {/* Definition */}
       <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
         <div className="flex items-start gap-3 mb-4">
@@ -203,6 +208,11 @@ function TablesTab() {
                   </td>
                   <td className="border border-slate-300 dark:border-slate-600 px-4 py-3">
                     <MathWrapper formula={property.formula} />
+                    {'caveat' in property && property.caveat && (
+                      <p className="text-xs italic text-amber-600 dark:text-amber-400 mt-1">
+                        ⚠ {property.caveat}
+                      </p>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -330,6 +340,9 @@ function ExamplesTab() {
 }
 
 export function LaplaceTheory() {
+  const markVisited = useProgressStore((s) => s.markVisited);
+  useEffect(() => { markVisited('laplace-theory'); }, [markVisited]);
+
   return (
     <div className="space-y-8">
       <SectionHook text="Oliver Heaviside developed the operational calculus that became Laplace transforms in the 1880s, largely to analyze telegraph lines. He was self-taught, often wrong in his methods, and completely right in his results. The transform tables you use today are his legacy." />

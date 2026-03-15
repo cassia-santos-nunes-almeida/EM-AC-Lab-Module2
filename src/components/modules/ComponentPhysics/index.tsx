@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ModuleNavigation } from '../../common/ModuleNavigation';
 import {
   calculateResistance,
@@ -9,10 +9,14 @@ import { ResistorSection } from './ResistorSection';
 import { CapacitorSection } from './CapacitorSection';
 import { InductorSection } from './InductorSection';
 import { SectionHook } from '../../common/SectionHook';
+import { useProgressStore } from '../../../store/progressStore';
 
 type ComponentType = 'resistor' | 'capacitor' | 'inductor';
 
 export function ComponentPhysics() {
+  const markVisited = useProgressStore((s) => s.markVisited);
+  useEffect(() => { markVisited('component-physics'); }, [markVisited]);
+
   const [activeComponent, setActiveComponent] = useState<ComponentType>('resistor');
 
   const [resistorLength, setResistorLength] = useState(1);

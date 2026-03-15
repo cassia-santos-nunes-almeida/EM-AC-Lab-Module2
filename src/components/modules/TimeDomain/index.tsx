@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MathWrapper } from '../../common/MathWrapper';
 import { CollapsibleSection } from '../../common/CollapsibleSection';
 import { ConceptCheck } from '../../common/ConceptCheck';
@@ -10,6 +10,8 @@ import { MethodComparisonTable } from './MethodComparisonTable';
 import { ResponseComparisons } from './ResponseComparisons';
 import { SectionHook } from '../../common/SectionHook';
 import { YourTurnPanel } from '../../common/YourTurnPanel';
+import { useProgressStore } from '../../../store/progressStore';
+import { CircuitAnalysisExercise } from '../CircuitAnalysisExercise';
 
 import type { CircuitType } from '../../../types/circuit';
 
@@ -21,6 +23,9 @@ const tocEntries = [
 ];
 
 export function TimeDomain() {
+  const markVisited = useProgressStore((s) => s.markVisited);
+  useEffect(() => { markVisited('circuit-analysis'); }, [markVisited]);
+
   const [selectedCircuit, setSelectedCircuit] = useState<CircuitType>('RC');
 
   return (
@@ -85,6 +90,13 @@ export function TimeDomain() {
       <CollapsibleSection title="Circuit Response Types" defaultOpen={false} className="scroll-mt-4" id="response-types">
         <ResponseComparisons />
       </CollapsibleSection>
+
+      <section id="systematic-analysis" className="scroll-mt-4">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+          Systematic Analysis Practice
+        </h2>
+        <CircuitAnalysisExercise />
+      </section>
 
       <ModuleNavigation />
     </div>
