@@ -15,9 +15,9 @@ An interactive learning platform for electromagnetics and analog circuit analysi
 | **S-Domain Analysis** | Transfer functions, poles and zeros visualization, damping ratios, and stability analysis with interactive pole-zero plots |
 | **Interactive Lab** | Real-time circuit simulations with parameter tuning (R, L, C, voltage, duration) supporting step and impulse responses |
 
-## AI Circuit Tutor (optional)
+## Think it Through (optional)
 
-The app includes an AI-powered tutor sidebar that can answer circuit analysis questions. It uses the **Google Gemini API** (free tier) and supports three display modes: closed, docked, and floating.
+The app includes a Socratic AI tutor sidebar that guides students through circuit analysis with questions rather than direct answers. It uses the **Google Gemini API** (free tier) and supports three display modes: closed, docked, and floating.
 
 To enable it:
 1. Get a free API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
