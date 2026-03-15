@@ -2,7 +2,7 @@
 
 An interactive learning platform for analog circuit analysis. Built for students taking introductory circuit theory courses at LUT University. This is the second module in the **EM&AC Lab** three-module course.
 
-**Live Demo:** https://em-ac-lab-module.vercel.app/
+**Live Demo:** https://em-ac-lab-module2.vercel.app/
 
 ## Course Structure
 
