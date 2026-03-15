@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
 import { MathWrapper } from '../../common/MathWrapper';
 import { PoleTooltip } from '../../common/CircuitCharts';
+import { PredictionGate } from '../../common/PredictionGate';
 import type { Complex } from '../../../types/circuit';
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -27,6 +29,17 @@ export function SDomainPanel({
     name: `Pole ${idx + 1}`,
   }));
 
+  const poleResetKey = useMemo(() =>
+    poles.map(p => `${p.real.toFixed(1)},${p.imag.toFixed(1)}`).join('|'),
+    [poles],
+  );
+
+  const getCorrectPoleAnswer = () => {
+    const allReal = poles.every(p => Math.abs(p.imag) < 0.01);
+    if (allReal) return 'real-axis';
+    return 'complex-conjugate';
+  };
+
   return (
     <div className="grid lg:grid-cols-2 gap-6">
       {/* Left: Transfer function + parameters */}
@@ -52,6 +65,7 @@ export function SDomainPanel({
             <div>
               <MathWrapper formula="\zeta = \frac{\alpha}{\omega_0}" />
               <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">= {zeta.toFixed(3)}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 italic mt-1">Is this value in the range you'd expect physically?</p>
             </div>
           </div>
         </div>
@@ -94,7 +108,28 @@ export function SDomainPanel({
         </div>
       </div>
 
-      {/* Right: Pole-Zero Map */}
+      {/* Right: Pole-Zero Map — gated by prediction */}
+      <PredictionGate
+        question="Given this transfer function, where do you expect the poles to be?"
+        options={[
+          { id: 'real-axis', label: 'Real axis only' },
+          { id: 'complex-conjugate', label: 'Complex conjugate pairs' },
+          { id: 'at-origin', label: 'At the origin' },
+        ]}
+        getCorrectAnswer={getCorrectPoleAnswer}
+        explanation={
+          <div className="text-sm text-slate-700 dark:text-slate-300">
+            <p>The poles are at:</p>
+            {poles.map((pole, idx) => (
+              <p key={idx} className="ml-2">
+                s<sub>{idx + 1}</sub> = {pole.real.toFixed(2)}
+                {pole.imag !== 0 && ` ${pole.imag > 0 ? '+' : ''}${pole.imag.toFixed(2)}j`}
+              </p>
+            ))}
+          </div>
+        }
+        resetKey={poleResetKey}
+      >
       <div>
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">S-Plane Pole-Zero Map</h3>
         <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
@@ -138,6 +173,7 @@ export function SDomainPanel({
           </p>
         </div>
       </div>
+      </PredictionGate>
     </div>
   );
 }

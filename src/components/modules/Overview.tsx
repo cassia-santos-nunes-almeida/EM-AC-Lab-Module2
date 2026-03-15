@@ -50,6 +50,25 @@ const learningPath = [
 function OverviewTab() {
   return (
     <div className="space-y-6">
+      {/* Situation — motivating scenario */}
+      <section className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-6 border-l-4 border-amber-500">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              A power supply you designed works perfectly in the lab. But when you connect it to the actual
+              load — a motor drive — it oscillates violently and trips the protection circuit. The component
+              values look right. The steady-state analysis checks out. What went wrong?
+            </p>
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mt-3">
+              The answer is <strong>transient behavior</strong>. The circuit&apos;s response to a sudden change in input
+              depends on its poles — and one of yours is too close to the imaginary axis. By the end of this
+              module you will be able to see that in the math before you ever build the circuit.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Two-domain overview */}
       <div className="grid md:grid-cols-2 gap-5">
         <div className="bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/30 dark:to-slate-800 p-5 rounded-xl border border-blue-200 dark:border-blue-800 shadow-sm">
@@ -115,18 +134,18 @@ function OverviewTab() {
         </div>
       </section>
 
-      {/* AI Tutor callout */}
+      {/* Think it Through callout */}
       <section className="bg-gradient-to-r from-engineering-blue-50 to-indigo-50 dark:from-engineering-blue-950/30 dark:to-indigo-950/20 rounded-xl p-5 border border-engineering-blue-200 dark:border-engineering-blue-800 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-engineering-blue-100 dark:bg-engineering-blue-900/50 flex items-center justify-center shrink-0">
             <Lightbulb className="w-4 h-4 text-engineering-blue-600 dark:text-engineering-blue-400" />
           </div>
           <div>
-            <h3 className="text-base font-semibold text-engineering-blue-900 dark:text-engineering-blue-200 mb-1">AI Circuit Tutor</h3>
+            <h3 className="text-base font-semibold text-engineering-blue-900 dark:text-engineering-blue-200 mb-1">Think it Through</h3>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Click the <strong>"AI Circuit Tutor"</strong> button on the right side of the screen to ask
-              questions anytime. The tutor is powered by Gemini and specializes in circuit analysis — it
-              can walk you through derivations, explain damping behavior, help with partial fractions, and more.
+              Click the <strong>&quot;Think it Through&quot;</strong> button on the right side of the screen to work through
+              problems with a Socratic tutor. It won&apos;t give you answers directly — instead, it asks guiding questions
+              to help you reason through circuit analysis on your own.
             </p>
           </div>
         </div>

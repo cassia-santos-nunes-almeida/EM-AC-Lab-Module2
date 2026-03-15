@@ -78,16 +78,16 @@ export function Layout({ children }: LayoutProps) {
             onClick={() => setTutorMode('docked')}
             className="hidden md:flex items-center gap-2 px-3 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-engineering-blue-300 hover:bg-engineering-blue-50 dark:hover:bg-engineering-blue-900/30 text-engineering-blue-700 dark:text-engineering-blue-300 writing-mode-vertical rounded-l-lg shadow-md transition-all z-50 shrink-0 self-center hover:shadow-lg"
             style={{ writingMode: 'vertical-rl' }}
-            aria-label="Open AI Tutor"
+            aria-label="Open Think it Through"
           >
             <MessageSquare className="w-5 h-5 text-engineering-blue-600 dark:text-engineering-blue-400" />
-            <span className="text-sm font-semibold tracking-wide">AI Circuit Tutor</span>
+            <span className="text-sm font-semibold tracking-wide">Think it Through</span>
           </button>
           {/* Mobile: floating action button */}
           <button
             onClick={() => setTutorMode('floating')}
             className="md:hidden fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-engineering-blue-600 text-white shadow-lg flex items-center justify-center hover:bg-engineering-blue-700 active:scale-95 transition-all"
-            aria-label="Open AI Tutor"
+            aria-label="Open Think it Through"
           >
             <MessageSquare className="w-6 h-6" />
           </button>

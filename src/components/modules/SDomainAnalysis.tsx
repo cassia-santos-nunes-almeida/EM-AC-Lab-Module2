@@ -1,9 +1,14 @@
-import { BookOpen, Activity, FlaskConical } from 'lucide-react';
+import { BookOpen, Activity, FlaskConical, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  ScatterChart, Scatter, XAxis, YAxis, CartesianGrid,
+  ResponsiveContainer, ReferenceLine,
+} from 'recharts';
 import { MathWrapper } from '../common/MathWrapper';
 import { ConceptCheck } from '../common/ConceptCheck';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
+import { SectionHook } from '../common/SectionHook';
 
 function TheoryTab() {
   return (
@@ -199,9 +204,141 @@ function DampingTab() {
   );
 }
 
+const readThePlotCases = [
+  {
+    id: 'A',
+    title: 'Case A',
+    poles: [{ x: -1, y: 0 }, { x: -4, y: 0 }],
+    domain: { x: [-6, 1], y: [-3, 3] },
+    options: [
+      { text: 'Overdamped — stable, no oscillation, two exponential decay terms', correct: true, explanation: 'Correct! Two real negative poles produce a stable response with no oscillation. Each pole contributes an exponential decay term e^(st), and since both s values are real and negative, the response decays smoothly.' },
+      { text: 'Underdamped — stable, oscillatory decay', correct: false, explanation: 'Underdamped requires complex conjugate poles. These poles are both real.' },
+      { text: 'Marginally stable — sustained oscillation', correct: false, explanation: 'Marginally stable requires poles on the imaginary axis (zero real part). These poles are at s = -1 and s = -4.' },
+      { text: 'Unstable — response grows without bound', correct: false, explanation: 'Unstable requires at least one pole in the right half-plane (positive real part). Both poles here have negative real parts.' },
+    ],
+    callout: 'The pole at s = -4 decays four times faster than the pole at s = -1. After a few time constants of 1/4 = 0.25s, only the slower mode (s = -1) dominates.',
+  },
+  {
+    id: 'B',
+    title: 'Case B',
+    poles: [{ x: -2, y: 3 }, { x: -2, y: -3 }],
+    domain: { x: [-5, 1], y: [-5, 5] },
+    options: [
+      { text: 'Underdamped — stable, oscillatory decay', correct: true, explanation: 'Correct! Complex conjugate poles with negative real parts produce a decaying sinusoid. The real part (-2) sets the decay rate, and the imaginary part (±3) sets the oscillation frequency.' },
+      { text: 'Overdamped — stable, no oscillation', correct: false, explanation: 'Overdamped requires two distinct real poles. These poles have imaginary parts (±3j), which produce oscillation.' },
+      { text: 'Marginally stable — sustained oscillation', correct: false, explanation: 'Marginally stable requires the real part to be exactly zero. These poles have real part = -2, so the oscillation decays.' },
+      { text: 'Unstable — response grows without bound', correct: false, explanation: 'Unstable requires positive real parts. Both poles have negative real parts (-2), so the response decays.' },
+    ],
+    callout: 'The oscillation frequency is ω = 3 rad/s and the envelope decays as e^(-2t). After t = 1/2 = 0.5s, the amplitude drops to 37% of its initial value.',
+  },
+  {
+    id: 'C',
+    title: 'Case C',
+    poles: [{ x: 0, y: 4 }, { x: 0, y: -4 }],
+    domain: { x: [-3, 3], y: [-6, 6] },
+    options: [
+      { text: 'Marginally stable — sustained oscillation', correct: true, explanation: 'Correct! Poles on the imaginary axis (zero real part) produce a pure sinusoid that neither grows nor decays. The response oscillates forever at ω = 4 rad/s.' },
+      { text: 'Underdamped — stable, oscillatory decay', correct: false, explanation: 'Underdamped requires negative real parts. These poles have zero real part, so the oscillation sustains indefinitely.' },
+      { text: 'Overdamped — stable, no oscillation', correct: false, explanation: 'These poles are complex (imaginary parts ±4j), which always produces oscillation.' },
+      { text: 'Unstable — response grows without bound', correct: false, explanation: 'Unstable requires poles in the right half-plane (positive real part). These are exactly on the boundary.' },
+    ],
+    callout: 'In practice, marginally stable circuits don\'t stay perfectly stable — any tiny perturbation pushes them toward instability. This is why real oscillator circuits need nonlinear limiting.',
+  },
+  {
+    id: 'D',
+    title: 'Case D',
+    poles: [{ x: 1, y: 2 }, { x: 1, y: -2 }],
+    domain: { x: [-2, 3], y: [-4, 4] },
+    options: [
+      { text: 'Unstable — response grows without bound', correct: true, explanation: 'Correct! Poles in the right half-plane (positive real part) produce a growing exponential. The response grows as e^(+t) while oscillating at ω = 2 rad/s — it blows up.' },
+      { text: 'Underdamped — stable, oscillatory decay', correct: false, explanation: 'The imaginary parts cause oscillation, but the positive real part (+1) means the envelope grows instead of decaying.' },
+      { text: 'Marginally stable — sustained oscillation', correct: false, explanation: 'Marginally stable requires zero real parts. These poles have real part = +1, firmly in the right half-plane.' },
+      { text: 'Overdamped — stable, no oscillation', correct: false, explanation: 'These poles are complex (they oscillate) and in the right half-plane (they\'re unstable). Nothing about this is overdamped or stable.' },
+    ],
+    callout: 'This is exactly what happens when feedback goes wrong — a pole crosses into the right half-plane and the system oscillates with growing amplitude until something limits it (or breaks).',
+  },
+];
+
+const poleChartColors = { grid: '#e2e8f0', text: '#475569' };
+
+function ReadThePlotTab() {
+  return (
+    <div className="space-y-8">
+      <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-3">Read the Plot</h2>
+        <p className="text-slate-600 dark:text-slate-300 mb-2">
+          Given a pole-zero plot, identify the system&apos;s time-domain behavior. For each case, examine where the poles
+          are in the s-plane and determine what that means for stability and transient response.
+        </p>
+      </section>
+
+      {readThePlotCases.map((caseData) => (
+        <section key={caseData.id} className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 space-y-4">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{caseData.title}</h3>
+
+          {/* Pole-zero plot */}
+          <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+            <ResponsiveContainer width="100%" height={220}>
+              <ScatterChart margin={{ top: 10, right: 20, bottom: 30, left: 30 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={poleChartColors.grid} />
+                <XAxis
+                  type="number"
+                  dataKey="x"
+                  name="Real"
+                  tick={{ fill: poleChartColors.text, fontSize: 11 }}
+                  label={{ value: 'Real (σ)', position: 'insideBottom', offset: -8, fill: poleChartColors.text, fontSize: 11 }}
+                  domain={caseData.domain.x as [number, number]}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="y"
+                  name="Imaginary"
+                  tick={{ fill: poleChartColors.text, fontSize: 11 }}
+                  label={{ value: 'Imag (jω)', angle: -90, position: 'insideLeft', fill: poleChartColors.text, fontSize: 11 }}
+                  domain={caseData.domain.y as [number, number]}
+                />
+                <ReferenceLine x={0} stroke="#64748b" strokeWidth={2} />
+                <ReferenceLine y={0} stroke="#64748b" strokeWidth={2} />
+                <Scatter
+                  name="Poles"
+                  data={caseData.poles}
+                  fill="#ef4444"
+                  shape="cross"
+                  line={false}
+                />
+              </ScatterChart>
+            </ResponsiveContainer>
+            <p className="text-xs text-center text-slate-500 dark:text-slate-400 mt-1">
+              Poles: {caseData.poles.map((p, i) => `s${i + 1} = ${p.x}${p.y !== 0 ? `${p.y > 0 ? '+' : ''}${p.y}j` : ''}`).join(', ')}
+            </p>
+          </div>
+
+          {/* Multiple choice */}
+          <ConceptCheck data={{
+            mode: 'multiple-choice',
+            question: 'What time-domain behavior does this pole configuration produce?',
+            options: caseData.options,
+          }} />
+
+          {/* Does this make sense? callout */}
+          <p className="text-xs text-slate-400 dark:text-slate-500 italic">
+            {caseData.callout}
+          </p>
+        </section>
+      ))}
+
+      <p className="text-xs text-slate-400 dark:text-slate-500 italic">
+        A pole at s = -100 decays much faster than one at s = -1. Is that consistent with the e<sup>st</sup> form of the solution?
+      </p>
+    </div>
+  );
+}
+
 export function SDomainAnalysis() {
   return (
     <div className="space-y-8">
+      <SectionHook text="Every audio amplifier, every feedback control system, every switching power supply has a pole-zero plot. Stability, bandwidth, and transient behavior are all visible in that plot before a single component is chosen." />
+
       <div>
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">S-Domain Theory</h1>
         <p className="text-lg text-slate-600 dark:text-slate-400">
@@ -220,6 +357,11 @@ export function SDomainAnalysis() {
             label: 'Damping & Takeaways',
             icon: <Activity className="w-4 h-4" />,
             content: <DampingTab />,
+          },
+          {
+            label: 'Read the Plot',
+            icon: <Search className="w-4 h-4" />,
+            content: <ReadThePlotTab />,
           },
         ]}
       />

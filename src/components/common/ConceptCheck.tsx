@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Lightbulb } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 interface MultipleChoiceOption {
@@ -12,24 +12,36 @@ interface MultipleChoiceCheck {
   mode: 'multiple-choice';
   question: string;
   options: MultipleChoiceOption[];
+  /** Progressive hints shown on request (tier 1: nudge, tier 2: conceptual, tier 3: near-answer) */
+  hints?: string[];
 }
 
 interface PredictRevealCheck {
   mode: 'predict-reveal';
   question: string;
   answer: string;
+  /** Progressive hints shown on request (tier 1: nudge, tier 2: conceptual, tier 3: near-answer) */
+  hints?: string[];
 }
 
 export type ConceptCheckData = MultipleChoiceCheck | PredictRevealCheck;
 
+/** Props for the ConceptCheck component supporting multiple-choice and predict-reveal modes. */
 interface ConceptCheckProps {
+  /** The concept check configuration including question, mode, and optional hints */
   data: ConceptCheckData;
+  /** Additional CSS class names */
   className?: string;
 }
 
 export function ConceptCheck({ data, className }: ConceptCheckProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [hintLevel, setHintLevel] = useState(0);
+
+  const hints = data.hints;
+  const hasHints = hints && hints.length > 0;
+  const canShowMoreHints = hasHints && hintLevel < hints.length;
 
   return (
     <div className={cn(
@@ -47,6 +59,27 @@ export function ConceptCheck({ data, className }: ConceptCheckProps) {
           </p>
         </div>
       </div>
+
+      {hintLevel > 0 && hints && (
+        <div className="ml-7 mb-3 space-y-1.5">
+          {hints.slice(0, hintLevel).map((hint, idx) => (
+            <div key={idx} className="flex items-start gap-1.5 bg-amber-50 dark:bg-amber-900/20 rounded p-2">
+              <Lightbulb className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-800 dark:text-amber-300">{hint}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {canShowMoreHints && selectedIndex === null && !revealed && (
+        <button
+          onClick={() => setHintLevel(prev => prev + 1)}
+          className="ml-7 mb-3 text-xs text-amber-700 dark:text-amber-400 hover:underline font-medium flex items-center gap-1"
+        >
+          <Lightbulb className="w-3 h-3" />
+          Need a hint?
+        </button>
+      )}
 
       {data.mode === 'multiple-choice' && (
         <div role="group" aria-label="Answer options" className="space-y-2 ml-7">
@@ -84,7 +117,7 @@ export function ConceptCheck({ data, className }: ConceptCheckProps) {
           })}
           {selectedIndex !== null && (
             <button
-              onClick={() => setSelectedIndex(null)}
+              onClick={() => { setSelectedIndex(null); setHintLevel(0); }}
               className="text-xs text-emerald-700 dark:text-emerald-400 hover:underline font-medium mt-1"
             >
               Try Again
