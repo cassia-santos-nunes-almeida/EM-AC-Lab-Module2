@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BookOpen, Activity, FlaskConical, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -9,6 +10,7 @@ import { ConceptCheck } from '../common/ConceptCheck';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { SectionHook } from '../common/SectionHook';
+import { useProgressStore } from '../../store/progressStore';
 
 function TheoryTab() {
   return (
@@ -335,6 +337,9 @@ function ReadThePlotTab() {
 }
 
 export function SDomainAnalysis() {
+  const markVisited = useProgressStore((s) => s.markVisited);
+  useEffect(() => { markVisited('s-domain'); }, [markVisited]);
+
   return (
     <div className="space-y-8">
       <SectionHook text="Every audio amplifier, every feedback control system, every switching power supply has a pole-zero plot. Stability, bandwidth, and transient behavior are all visible in that plot before a single component is chosen." />

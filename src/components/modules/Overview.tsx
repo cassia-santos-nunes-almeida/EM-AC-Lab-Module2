@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { Target, Compass, AlertTriangle, Scale, Zap, Clock, FunctionSquare, GitBranch, FlaskConical, ArrowRight, Lightbulb } from 'lucide-react';
 import { MathWrapper } from '../common/MathWrapper';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { Link } from 'react-router-dom';
+import { useProgressStore } from '../../store/progressStore';
 
 const learningPath = [
   {
@@ -245,6 +247,9 @@ function AboutTab() {
 }
 
 export function Overview() {
+  const markVisited = useProgressStore((s) => s.markVisited);
+  useEffect(() => { markVisited('overview'); }, [markVisited]);
+
   return (
     <div className="space-y-8">
       {/* Hero header */}

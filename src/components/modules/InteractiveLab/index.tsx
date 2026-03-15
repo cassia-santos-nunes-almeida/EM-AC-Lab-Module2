@@ -1,4 +1,4 @@
-import { useState, useMemo, useDeferredValue } from 'react';
+import { useState, useMemo, useDeferredValue, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { calculateCircuitResponse, calculateTransferFunction, type CircuitType, type InputType, type CircuitResponse } from '../../../utils/circuitSolver';
 import { dampingLabel } from '../../../types/circuit';
@@ -12,7 +12,7 @@ import { ModuleNavigation } from '../../common/ModuleNavigation';
 import { CircuitDiagram } from './CircuitDiagram';
 import { SDomainPanel } from './SDomainPanel';
 import { getChallenges } from './challenges';
-import { useThemeStore } from '../../../store/progressStore';
+import { useThemeStore, useProgressStore } from '../../../store/progressStore';
 import { SectionHook } from '../../common/SectionHook';
 import { PredictionGate } from '../../common/PredictionGate';
 import { classifyDamping } from '../../../types/circuit';
@@ -292,6 +292,9 @@ function FirstOrderAnalysisPanel({ circuitType, response, R, L, C }: {
 }
 
 export function InteractiveLab() {
+  const markVisited = useProgressStore((s) => s.markVisited);
+  useEffect(() => { markVisited('interactive-lab'); }, [markVisited]);
+
   const [circuitType, setCircuitType] = useState<CircuitType>('RLC');
   const [inputType, setInputType] = useState<InputType>('step');
   const [R, setR] = useState(100);
