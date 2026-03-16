@@ -50,21 +50,21 @@ export function ComponentPhysics() {
 
       <div className="grid gap-4 sm:grid-cols-3 mb-6">
         <FigureImage
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Resistors.jpg/640px-Resistors.jpg"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Resistors.jpg/500px-Resistors.jpg"
           alt="Assorted through-hole resistors with color-coded bands"
           caption="Real resistors: the colored bands encode resistance values. Physical dimensions relate to R = ρL/A."
           attribution="Evan-Amos, Public Domain — Wikimedia Commons"
           sourceUrl="https://commons.wikimedia.org/wiki/File:Resistors.jpg"
         />
         <FigureImage
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Condensators.JPG/640px-Condensators.JPG"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Condensators.JPG/500px-Condensators.JPG"
           alt="Various types of capacitors including ceramic, electrolytic, and film"
           caption="Capacitor types: construction determines capacitance via C = εA/d."
           attribution="Eric Schrader, CC BY-SA 2.5 — Wikimedia Commons"
           sourceUrl="https://commons.wikimedia.org/wiki/File:Condensators.JPG"
         />
         <FigureImage
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Inductor_RF_choke.jpg/640px-Inductor_RF_choke.jpg"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Inductor_RF_choke.jpg/500px-Inductor_RF_choke.jpg"
           alt="Various inductors and RF chokes"
           caption="Inductors store energy in magnetic fields. Core material and turns determine L = μN²A/l."
           attribution="Honina, CC BY-SA 3.0 — Wikimedia Commons"

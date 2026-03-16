@@ -373,7 +373,7 @@ export function Overview() {
 
       <FigureImage
         className="mb-6"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/RLC_series_circuit_v1.svg/440px-RLC_series_circuit_v1.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/RLC_series_circuit_v1.svg/500px-RLC_series_circuit_v1.svg.png"
         alt="Schematic of a series RLC circuit"
         caption="The series RLC circuit: the fundamental building block studied throughout this module."
         attribution="Wikimedia Commons, Public Domain"

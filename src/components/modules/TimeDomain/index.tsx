@@ -42,7 +42,7 @@ export function TimeDomain() {
 
       <FigureImage
         className="mb-6"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Rc_charge_discharge.svg/640px-Rc_charge_discharge.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Rc_charge_discharge.svg/500px-Rc_charge_discharge.svg.png"
         alt="RC circuit charge and discharge curves showing exponential behavior"
         caption="RC charge and discharge: voltage rises to 63% after one time constant τ = RC."
         attribution="Wikimedia Commons, Public Domain"
