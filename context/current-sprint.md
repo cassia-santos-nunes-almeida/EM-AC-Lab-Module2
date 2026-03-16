@@ -67,7 +67,22 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
   - [x] Created KVL/KCL multiple-choice exercise (CircuitAnalysisExercise component)
   - [x] All 78 tests passing, build clean
 
+## Completed (Image & Analytics Sprint — 2026-03-16)
+- [x] Added 8 real-world educational images with FigureImage component across all pages
+- [x] Standardized README with unified template
+- [x] Added Vercel Analytics with owner filtering, session tracking, referrer detection
+- [x] Fixed broken Wikimedia image URLs (corrected MD5 hash paths, replaced non-existent filename)
+- [x] Added FigureImage click-to-enlarge modal + responsive size constraints
+- All PRs merged to `main` via branch `claude/audit-react-educational-apps-mqaVf`
+
 ## Next
-- SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)
-- Additional TOC on ComponentPhysics page (currently tab-based, may not need it)
-- Consider keyboard shortcut hints in AiTutor
+- [ ] Extract `useShareableParams` hook — generic URL param sync (used by InteractiveLab, extend to ComponentPhysics)
+- [ ] Extract `ChartToolbar` or `useChartExport` hook — reusable chart download + copy link buttons
+- [ ] ComponentPhysics: shareable URLs for slider state (resistor geometry, capacitor geometry, inductor geometry)
+- [ ] TimeDomain: shareable URL for active circuit tab; chart export on response comparison chart
+- [ ] SDomainAnalysis: chart export on pole-zero scatter plot
+- [ ] Meaningful progress tracking — based on completed challenges/concept checks, not page visits (see decisions.md)
+- [ ] SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)
+- [ ] Consider keyboard shortcut hints in AiTutor
+- [ ] Manually verify all Wikimedia image URLs load correctly on the live site
+- [ ] Generate PWA icons (pwa-192x192.png, pwa-512x512.png)
