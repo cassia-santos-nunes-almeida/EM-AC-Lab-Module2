@@ -1,9 +1,9 @@
 # Current Sprint
 
 ## Goal
-Code quality, UX polish, and student experience — dark mode, responsive layout, component architecture, testing, performance.
+Feature completeness and reusability — extract shareable URL/chart export patterns, extend to other modules, consider meaningful progress tracking.
 
-## Status
+## Completed (previous sprint)
 - [x] Initial repo created from audited branch
 - [x] CLAUDE.md written
 - [x] CI/CD pipeline configured
@@ -57,25 +57,13 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [x] Comprehensive accessibility audit — ARIA tab pattern, roving tabIndex, aria-live regions, skip-to-content, role="dialog", role="region", role="group"
 - [x] Page-level integration tests — 13 tests for ComponentPhysics, TimeDomain, SDomainAnalysis (78 total tests)
 
-- [x] Cross-module audit implementation (2026-03-15):
-  - [x] Added progress persistence via useProgressStore (persisted to `emac-m2-progress`)
-  - [x] Unified dark mode to shared `emac-theme` localStorage key
-  - [x] Added cross-module URL env vars and `src/constants/modules.ts`
-  - [x] Added FVT stability caveat in LaplaceTheory properties table
-  - [x] Added iron permeability note in componentMath.ts MaterialProperty
-  - [x] Created Laplace "feel the pain" motivation demo (LaplaceMotivation component)
-  - [x] Created KVL/KCL multiple-choice exercise (CircuitAnalysisExercise component)
-  - [x] All 78 tests passing, build clean
+- [x] Concept checks added to ComponentPhysics (resistor, capacitor, inductor — one multiple-choice per tab)
+- [x] Module Summary "Review" tab on Overview page (big picture, key connections, self-assessment checklist)
+- [x] Shareable lab links — URL search params sync for circuit type, input, R, L, C, V
+- [x] Chart export — Download PNG button on response visualization
+- [x] Copy shareable link button on response visualization
 
-## Completed (Image & Analytics Sprint — 2026-03-16)
-- [x] Added 8 real-world educational images with FigureImage component across all pages
-- [x] Standardized README with unified template
-- [x] Added Vercel Analytics with owner filtering, session tracking, referrer detection
-- [x] Fixed broken Wikimedia image URLs (corrected MD5 hash paths, replaced non-existent filename)
-- [x] Added FigureImage click-to-enlarge modal + responsive size constraints
-- All PRs merged to `main` via branch `claude/audit-react-educational-apps-mqaVf`
-
-## Next
+## Next (this sprint)
 - [ ] Extract `useShareableParams` hook — generic URL param sync (used by InteractiveLab, extend to ComponentPhysics)
 - [ ] Extract `ChartToolbar` or `useChartExport` hook — reusable chart download + copy link buttons
 - [ ] ComponentPhysics: shareable URLs for slider state (resistor geometry, capacitor geometry, inductor geometry)
@@ -84,5 +72,3 @@ Code quality, UX polish, and student experience — dark mode, responsive layout
 - [ ] Meaningful progress tracking — based on completed challenges/concept checks, not page visits (see decisions.md)
 - [ ] SDomainAnalysis / LaplaceTheory / Overview page decomposition (if files grow)
 - [ ] Consider keyboard shortcut hints in AiTutor
-- [ ] Manually verify all Wikimedia image URLs load correctly on the live site
-- [ ] Generate PWA icons (pwa-192x192.png, pwa-512x512.png)

@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Target, Compass, AlertTriangle, Scale, Zap, Clock, FunctionSquare, GitBranch, FlaskConical, ArrowRight, Lightbulb } from 'lucide-react';
+import { Target, Compass, AlertTriangle, Scale, Zap, Clock, FunctionSquare, GitBranch, FlaskConical, ArrowRight, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { MathWrapper } from '../common/MathWrapper';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
@@ -247,6 +246,109 @@ function AboutTab() {
   );
 }
 
+function ReviewTab() {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Module Summary</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Key ideas that connect across all sections</p>
+        </div>
+      </div>
+
+      {/* Big picture */}
+      <section className="bg-gradient-to-br from-engineering-blue-50 to-indigo-50 dark:from-engineering-blue-950/30 dark:to-indigo-950/20 rounded-xl p-6 border border-engineering-blue-200 dark:border-engineering-blue-800">
+        <h3 className="text-base font-semibold text-engineering-blue-900 dark:text-engineering-blue-200 mb-3">The Big Picture</h3>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          Everything in this module connects through one thread: <strong>energy storage creates memory</strong>.
+          Capacitors store energy in electric fields, inductors in magnetic fields — and that stored energy
+          means the circuit&apos;s future depends on its past. Differential equations capture that time-dependence;
+          the Laplace transform converts it to algebra so you can see the answer in the structure of the equation.
+        </p>
+      </section>
+
+      {/* Key connections */}
+      <div className="space-y-4">
+        <h3 className="text-base font-semibold text-slate-900 dark:text-white">Key Connections</h3>
+
+        <div className="grid gap-3">
+          {[
+            {
+              title: 'Component Physics → Circuit Behavior',
+              content: <>
+                The physical formulas (<MathWrapper formula="R = \rho L/A" />, <MathWrapper formula="C = \varepsilon A/d" />, <MathWrapper formula="L = \mu N^2 A / l" />) determine the component values that set the circuit&apos;s time constant <MathWrapper formula="\tau" /> and natural frequency <MathWrapper formula="\omega_0" />. Changing geometry changes dynamics.
+              </>,
+              color: 'border-red-400 dark:border-red-600 bg-red-50/50 dark:bg-red-950/20',
+            },
+            {
+              title: 'Time Domain ↔ S-Domain',
+              content: <>
+                The time-domain ODE and the s-domain transfer function describe <strong>the same system</strong>.
+                The Laplace transform is the bridge: <MathWrapper formula="\mathcal{L}\{f'(t)\} = sF(s) - f(0)" /> turns derivatives into multiplication by <MathWrapper formula="s" />.
+                Poles of <MathWrapper formula="H(s)" /> map directly to exponential and oscillatory terms in the time response.
+              </>,
+              color: 'border-blue-400 dark:border-blue-600 bg-blue-50/50 dark:bg-blue-950/20',
+            },
+            {
+              title: 'Damping Ratio → Everything',
+              content: <>
+                A single number — the damping ratio <MathWrapper formula="\zeta = R/(2\sqrt{L/C})" /> — tells you whether the circuit oscillates
+                (<MathWrapper formula="\zeta < 1" />), settles fastest (<MathWrapper formula="\zeta = 1" />),
+                or sluggishly decays (<MathWrapper formula="\zeta > 1" />). In the s-plane, this is visible
+                from the pole angle relative to the negative real axis.
+              </>,
+              color: 'border-purple-400 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/20',
+            },
+            {
+              title: 'Poles → Stability',
+              content: <>
+                Poles in the left half-plane: stable (decays). On the imaginary axis: marginally stable
+                (sustained oscillation). Right half-plane: unstable (blows up). This single rule applies to
+                every linear circuit, regardless of order.
+              </>,
+              color: 'border-emerald-400 dark:border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20',
+            },
+          ].map((item) => (
+            <div key={item.title} className={`rounded-lg p-4 border-l-4 ${item.color}`}>
+              <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">{item.title}</h4>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{item.content}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Self-assessment checklist */}
+      <section className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-slate-100 dark:border-slate-700">
+        <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-4">Self-Assessment Checklist</h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+          Can you confidently do each of these? If not, revisit the relevant module.
+        </p>
+        <div className="grid md:grid-cols-2 gap-2">
+          {[
+            { text: 'Explain how geometry affects R, L, and C values', module: 'Component Physics' },
+            { text: <>Write the ODE for an RC, RL, or RLC circuit from KVL</>, module: 'Circuit Analysis' },
+            { text: 'Look up a Laplace transform pair and apply the differentiation property', module: 'Laplace Theory' },
+            { text: <>Calculate <MathWrapper formula="\alpha" />, <MathWrapper formula="\omega_0" />, and <MathWrapper formula="\zeta" /> from R, L, C values</>, module: 'S-Domain Theory' },
+            { text: 'Predict damping type from pole locations on the s-plane', module: 'S-Domain Theory' },
+            { text: 'Predict the qualitative shape of a step response before simulating it', module: 'Interactive Lab' },
+          ].map((item, idx) => (
+            <div key={idx} className="flex items-start gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+              <div className="w-4 h-4 rounded border-2 border-slate-300 dark:border-slate-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm text-slate-700 dark:text-slate-300">{item.text}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{item.module}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export function Overview() {
   const markVisited = useProgressStore((s) => s.markVisited);
   useEffect(() => { markVisited('overview'); }, [markVisited]);
@@ -289,6 +391,11 @@ export function Overview() {
             label: 'Learning Path',
             icon: <Compass className="w-4 h-4" />,
             content: <LearningPathTab />,
+          },
+          {
+            label: 'Review',
+            icon: <CheckCircle2 className="w-4 h-4" />,
+            content: <ReviewTab />,
           },
           {
             label: 'About',

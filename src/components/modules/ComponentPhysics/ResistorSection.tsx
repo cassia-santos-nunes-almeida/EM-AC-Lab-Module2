@@ -1,4 +1,5 @@
-import { MathWrapper } from '@/components/common/MathWrapper';
+import { MathWrapper } from '../../common/MathWrapper';
+import { ConceptCheck } from '../../common/ConceptCheck';
 import { ComponentSectionLayout } from './ComponentSectionLayout';
 import {
   resistanceFormula,
@@ -182,10 +183,37 @@ export function ResistorSection({
           </div>
 
           {/* 4. Result */}
-          <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-100 dark:border-red-800">
+          <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-100 dark:border-red-800 mb-5">
             <p className="text-sm font-semibold text-red-900 dark:text-red-300 mb-1">Calculated Resistance:</p>
             <p className="text-3xl font-bold text-red-700 dark:text-red-400">{resistance.toFixed(3)} &#937;</p>
           </div>
+
+          {/* 5. Concept Check */}
+          <ConceptCheck data={{
+            mode: 'multiple-choice',
+            question: 'You have two wires of the same material and length. Wire A has twice the cross-sectional area of Wire B. Which has more resistance?',
+            hints: [
+              'Look at the formula R = ρL/A. What happens when A increases?',
+              'Larger cross-section means more room for electrons to flow.',
+            ],
+            options: [
+              {
+                text: 'Wire B (smaller area) has more resistance',
+                correct: true,
+                explanation: 'Correct! R = ρL/A — resistance is inversely proportional to area. Halving the area doubles the resistance, like forcing the same flow of water through a narrower pipe.',
+              },
+              {
+                text: 'Wire A (larger area) has more resistance',
+                correct: false,
+                explanation: 'Larger cross-sectional area actually decreases resistance. Think of it like a wider pipe — more room for current to flow.',
+              },
+              {
+                text: 'Both have the same resistance',
+                correct: false,
+                explanation: 'Cross-sectional area directly affects resistance. R = ρL/A shows that area is in the denominator — bigger area means lower resistance.',
+              },
+            ],
+          }} />
       </>}
     />
   );

@@ -4,12 +4,16 @@ Chronological log of key decisions. Newest at top.
 
 ---
 
-### 2026-03-15 — Cross-module audit: unified theme + progress + pedagogical additions
-**Decision**: (1) Re-add `useProgressStore` with section-level tracking (visits, prediction gates, concept checks, hints) persisted to `emac-m2-progress`. (2) Unify dark mode to shared `emac-theme` key. (3) Add Laplace motivation demo, KVL/KCL exercise, FVT caveat, iron permeability note, cross-module URLs.
-**Reason**: Part of a cross-module audit aligning all three EM&AC Lab modules. Progress tracking now uses meaningful signals (concept checks, prediction gates) rather than visit-based tracking. Shared theme key provides consistent dark mode across modules.
+### 2026-03-15 — Shareable lab links and chart export
+**Decision**: Sync InteractiveLab state (circuit type, input type, R, L, C, V) to URL search params via `useSearchParams`. Add Download PNG (SVG→Canvas→PNG via XMLSerializer) and Copy Link buttons to the chart header.
+**Reason**: Students need to share specific circuit configurations with classmates/teachers for discussion, and export charts for lab reports. URL params use `replace: true` to avoid polluting browser history. Deferred values prevent URL thrashing during slider drag.
 
-### 2026-03-15 — Remove visit-based progress tracking
-**Decision**: Remove visit-based `useProgressStore`, sidebar progress bar, and visited-module checkmark indicators. Keep `useThemeStore` in `progressStore.ts`.
+### 2026-03-15 — ComponentPhysics concept checks and Overview review tab
+**Decision**: Add one multiple-choice ConceptCheck per ComponentPhysics tab (resistor: area/resistance relationship, capacitor: dielectric effect, inductor: N² scaling). Add "Review" tab to Overview with cross-module connections and self-assessment checklist.
+**Reason**: ComponentPhysics was the only module without active recall. The review tab gives students a place to consolidate understanding and self-assess readiness. All formulas cross-checked against standard references (HyperPhysics, Wikipedia, MIT OCW, Engineering Toolbox, LibreTexts).
+
+### 2026-03-15 — Remove progress tracking (visit-based)
+**Decision**: Remove `useProgressStore`, sidebar progress bar, and visited-module checkmark indicators. Keep `useThemeStore` in `progressStore.ts`.
 **Reason**: Visiting a page is not the same as learning from it. The progress bar gave a false sense of completion. Sidebar now shows clean navigation icons without visit state. If progress tracking returns, it should be based on meaningful signals (e.g., completed challenges, answered concept checks).
 
 ---

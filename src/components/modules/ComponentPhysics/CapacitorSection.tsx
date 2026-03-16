@@ -1,4 +1,5 @@
-import { MathWrapper } from '@/components/common/MathWrapper';
+import { MathWrapper } from '../../common/MathWrapper';
+import { ConceptCheck } from '../../common/ConceptCheck';
 import { ComponentSectionLayout } from './ComponentSectionLayout';
 import {
   capacitanceFormula,
@@ -237,10 +238,37 @@ export function CapacitorSection({
           </div>
 
           {/* 4. Result */}
-          <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
+          <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800 mb-5">
             <p className="text-sm font-semibold text-green-900 dark:text-green-300 mb-1">Calculated Capacitance:</p>
             <p className="text-3xl font-bold text-green-700 dark:text-green-400">{(capacitance * 1e12).toFixed(2)} pF</p>
           </div>
+
+          {/* 5. Concept Check */}
+          <ConceptCheck data={{
+            mode: 'multiple-choice',
+            question: 'A capacitor uses a glass dielectric (εr ≈ 4.5) instead of air (εr = 1). What happens to the capacitance?',
+            hints: [
+              'C = εA/d, where ε = ε₀ × εr. What happens when εr increases?',
+              'The dielectric polarizes under the electric field, effectively storing more charge for the same voltage.',
+            ],
+            options: [
+              {
+                text: 'Capacitance increases by a factor of about 4.5',
+                correct: true,
+                explanation: 'Correct! C = εA/d = ε₀εrA/d. Replacing air (εr = 1) with glass (εr ≈ 4.5) multiplies the capacitance by 4.5. This is exactly why dielectric materials are used — they let you get more capacitance from the same physical size.',
+              },
+              {
+                text: 'Capacitance decreases — glass blocks the electric field',
+                correct: false,
+                explanation: 'Glass doesn\'t block the field — it polarizes under it. The aligned dipoles in the dielectric actually enhance charge storage, increasing capacitance.',
+              },
+              {
+                text: 'Capacitance stays the same — only geometry matters',
+                correct: false,
+                explanation: 'Geometry (A and d) matters, but so does the dielectric material. C = ε₀εrA/d — the relative permittivity εr is a direct multiplier on capacitance.',
+              },
+            ],
+          }} />
       </>}
     />
   );

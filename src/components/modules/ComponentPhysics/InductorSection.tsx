@@ -1,4 +1,5 @@
-import { MathWrapper } from '@/components/common/MathWrapper';
+import { MathWrapper } from '../../common/MathWrapper';
+import { ConceptCheck } from '../../common/ConceptCheck';
 import { ComponentSectionLayout } from './ComponentSectionLayout';
 import {
   inductanceFormula,
@@ -206,10 +207,37 @@ export function InductorSection({
           </div>
 
           {/* 4. Result */}
-          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
+          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-800 mb-5">
             <p className="text-sm font-semibold text-purple-900 dark:text-purple-300 mb-1">Calculated Inductance:</p>
             <p className="text-3xl font-bold text-purple-700 dark:text-purple-400">{(inductance * 1000).toFixed(2)} mH</p>
           </div>
+
+          {/* 5. Concept Check */}
+          <ConceptCheck data={{
+            mode: 'multiple-choice',
+            question: 'An inductor has N = 100 turns. If you double the number of turns to N = 200 (keeping everything else the same), what happens to the inductance?',
+            hints: [
+              'Look at the formula L = μN²A/l. How does N appear?',
+              'N is squared — doubling it doesn\'t just double the result.',
+            ],
+            options: [
+              {
+                text: 'Inductance quadruples (4× increase)',
+                correct: true,
+                explanation: 'Correct! L = μN²A/l — inductance depends on N². Doubling N means L increases by 2² = 4. Each turn not only adds its own flux but also links with flux from every other turn, creating a squared relationship.',
+              },
+              {
+                text: 'Inductance doubles (2× increase)',
+                correct: false,
+                explanation: 'It\'s more than doubling! L = μN²A/l — the number of turns is squared. Each added turn links with the magnetic flux from all other turns, so the effect compounds.',
+              },
+              {
+                text: 'Inductance increases by √2',
+                correct: false,
+                explanation: 'N enters the formula as N², not √N. Doubling N gives 2² = 4 times the inductance. The squared relationship comes from mutual coupling between turns.',
+              },
+            ],
+          }} />
       </>}
     />
   );
