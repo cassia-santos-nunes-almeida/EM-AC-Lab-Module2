@@ -14,6 +14,7 @@ import { SDomainPanel } from './SDomainPanel';
 import { getChallenges } from './challenges';
 import { useThemeStore, useProgressStore } from '@/store/progressStore';
 import { SectionHook } from '@/components/common/SectionHook';
+import { FigureImage } from '@/components/common/FigureImage';
 import { PredictionGate } from '@/components/common/PredictionGate';
 import { classifyDamping } from '@/types/circuit';
 
@@ -520,6 +521,15 @@ export function InteractiveLab() {
           Real-time circuit simulation and visualization
         </p>
       </div>
+
+      <FigureImage
+        className="mb-6"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Fluke_87_V_on_holder.jpg/440px-Fluke_87_V_on_holder.jpg"
+        alt="Digital multimeter on a lab bench"
+        caption="A digital multimeter: the interactive lab below simulates the same measurements you'd make with real instruments."
+        attribution="Wikimedia Commons, CC BY-SA 4.0"
+        sourceUrl="https://commons.wikimedia.org/wiki/File:Fluke_87_V_on_holder.jpg"
+      />
 
       {/* Circuit type tabs + input type toggle */}
       <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-700">

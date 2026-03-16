@@ -9,6 +9,7 @@ import { ResistorSection } from './ResistorSection';
 import { CapacitorSection } from './CapacitorSection';
 import { InductorSection } from './InductorSection';
 import { SectionHook } from '@/components/common/SectionHook';
+import { FigureImage } from '@/components/common/FigureImage';
 import { useProgressStore } from '@/store/progressStore';
 
 type ComponentType = 'resistor' | 'capacitor' | 'inductor';
@@ -45,6 +46,30 @@ export function ComponentPhysics() {
         <p className="text-lg text-slate-600 dark:text-slate-400">
           Understanding the physical foundations of circuit components
         </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-3 mb-6">
+        <FigureImage
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Resistors.jpg/640px-Resistors.jpg"
+          alt="Assorted through-hole resistors with color-coded bands"
+          caption="Real resistors: the colored bands encode resistance values. Physical dimensions relate to R = ρL/A."
+          attribution="Evan-Amos, Public Domain — Wikimedia Commons"
+          sourceUrl="https://commons.wikimedia.org/wiki/File:Resistors.jpg"
+        />
+        <FigureImage
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Condensators.JPG/640px-Condensators.JPG"
+          alt="Various types of capacitors including ceramic, electrolytic, and film"
+          caption="Capacitor types: construction determines capacitance via C = εA/d."
+          attribution="Eric Schrader, CC BY-SA 2.5 — Wikimedia Commons"
+          sourceUrl="https://commons.wikimedia.org/wiki/File:Condensators.JPG"
+        />
+        <FigureImage
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Inductor_RF_choke.jpg/640px-Inductor_RF_choke.jpg"
+          alt="Various inductors and RF chokes"
+          caption="Inductors store energy in magnetic fields. Core material and turns determine L = μN²A/l."
+          attribution="Honina, CC BY-SA 3.0 — Wikimedia Commons"
+          sourceUrl="https://commons.wikimedia.org/wiki/File:Inductor_RF_choke.jpg"
+        />
       </div>
 
       <div className="flex border-b-2 border-slate-200 dark:border-slate-700">

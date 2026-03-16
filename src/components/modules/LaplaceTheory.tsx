@@ -7,12 +7,22 @@ import { ModuleNavigation } from '../common/ModuleNavigation';
 import { laplaceTransforms, laplaceProperties } from '@/utils/componentMath';
 import { BookOpen, Zap as ZapIcon, ArrowRightLeft, Table2 } from 'lucide-react';
 import { SectionHook } from '../common/SectionHook';
+import { FigureImage } from '@/components/common/FigureImage';
 import { useProgressStore } from '@/store/progressStore';
 import { LaplaceMotivation } from './LaplaceMotivation';
 
 function TheoryTab() {
   return (
     <div className="space-y-6">
+      <FigureImage
+        className="mb-6"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Pierre-Simon_Laplace.jpg/440px-Pierre-Simon_Laplace.jpg"
+        alt="Portrait of Pierre-Simon Laplace"
+        caption="Pierre-Simon Laplace (1749–1827): his integral transform converts differential equations into algebraic ones."
+        attribution="Public Domain — Wikimedia Commons"
+        sourceUrl="https://commons.wikimedia.org/wiki/File:Pierre-Simon_Laplace.jpg"
+      />
+
       <LaplaceMotivation />
 
       {/* Definition */}
