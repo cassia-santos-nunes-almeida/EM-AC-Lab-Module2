@@ -55,7 +55,8 @@ Feature completeness and reusability — extract shareable URL/chart export patt
 - [x] Shared `useOnlineStatus` hook extracted from duplicated code in AiTutor + Layout
 - [x] Vendor chunk splitting — manualChunks for react, recharts, katex, gemini (eliminated 500KB+ warning)
 - [x] Comprehensive accessibility audit — ARIA tab pattern, roving tabIndex, aria-live regions, skip-to-content, role="dialog", role="region", role="group"
-- [x] Page-level integration tests — 13 tests for ComponentPhysics, TimeDomain, SDomainAnalysis (78 total tests)
+- [x] Page-level integration tests — 13 tests for ComponentPhysics, TimeDomain, SDomainAnalysis
+- [x] Hook tests — useShareableParams (clampNum, parseEnum) + useChartExport (92 total tests)
 
 - [x] Concept checks added to ComponentPhysics (resistor, capacitor, inductor — one multiple-choice per tab)
 - [x] Module Summary "Review" tab on Overview page (big picture, key connections, self-assessment checklist)
@@ -64,8 +65,8 @@ Feature completeness and reusability — extract shareable URL/chart export patt
 - [x] Copy shareable link button on response visualization
 
 ## Next (this sprint)
-- [ ] Extract `useShareableParams` hook — generic URL param sync (used by InteractiveLab, extend to ComponentPhysics)
-- [ ] Extract `ChartToolbar` or `useChartExport` hook — reusable chart download + copy link buttons
+- [x] Extract `useShareableParams` hook — generic URL param sync (clampNum, parseEnum, useUrlSync, useCopyLink)
+- [x] Extract `useChartExport` hook — reusable SVG→PNG chart export
 - [ ] ComponentPhysics: shareable URLs for slider state (resistor geometry, capacitor geometry, inductor geometry)
 - [ ] TimeDomain: shareable URL for active circuit tab; chart export on response comparison chart
 - [ ] SDomainAnalysis: chart export on pole-zero scatter plot

@@ -12,7 +12,7 @@ Interactive learning platform for analog circuit analysis. React 19 + TypeScript
 - `npm run build` — TypeScript check + production build (`tsc -b && vite build`)
 - `npm run lint` — ESLint (includes jsx-a11y accessibility checks)
 - `npm run preview` — Preview production build locally
-- `npm test` — Run Vitest test suite (78 tests)
+- `npm test` — Run Vitest test suite (92 tests)
 - `npm run test:watch` — Run Vitest in watch mode
 
 ## Architecture
