@@ -1,5 +1,7 @@
 # EM&AC Lab — Module 2: Circuit Analysis
 
+> *From resistor physics to pole-zero plots — master circuit analysis through interactive simulations, Laplace transforms & real-time s-domain visualization.*
+
 An interactive learning platform for analog circuit analysis. Built for students taking introductory circuit theory courses at LUT University. This is the second module in the **EM&AC Lab** three-module course.
 
 **Live Demo:** https://em-ac-lab-module2.vercel.app/
@@ -16,6 +18,18 @@ This app is part of a three-module progressive learning sequence:
 
 **Module 1 → Module 2:** Magnetic circuits, mutual inductance, and phasor concepts from Module 1 provide the physical foundation for circuit analysis here. **Module 2 → Module 3:** The Laplace transform techniques and impedance concepts mastered here are essential for transmission line analysis in Module 3.
 
+## Features
+
+- **6 Interactive Modules** — Component physics, time-domain ODE, Laplace theory, s-domain analysis, and interactive lab
+- **"Think it Through" Socratic Tutor** — AI chat (Google Gemini) that guides via questions, never gives direct answers
+- **PredictionGate** — Students commit a prediction before accessing simulations
+- **ConceptCheck** — Multiple-choice knowledge checks embedded throughout modules
+- **Real-Time Circuit Charts** — Recharts-powered step/impulse response visualization with parameter tuning
+- **Dark Mode** — Persisted theme toggle (shared `emac-theme` key across all three modules)
+- **Progress Tracking** — Section visits, prediction gates, concept checks tracked in localStorage
+- **PWA** — Installable as a Progressive Web App with offline support
+- **Accessible** — WAI-ARIA tabs, roving tabIndex, skip-to-content, aria-live regions
+
 ## Modules
 
 | Route | Module | Description |
@@ -27,67 +41,103 @@ This app is part of a three-module progressive learning sequence:
 | `/s-domain-analysis` | **S-Domain Analysis** | Transfer functions, poles/zeros visualization, damping ratios, stability analysis |
 | `/interactive-lab` | **Interactive Lab** | Real-time circuit simulations with parameter tuning, step/impulse responses, guided challenges |
 
-## Think it Through (optional)
+## Tech Stack
 
-The app includes a Socratic AI tutor sidebar that guides students through circuit analysis with questions rather than direct answers. It uses the **Google Gemini API** (free tier) and supports three display modes: closed, docked, and floating.
-
-To enable it:
-1. Get a free API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Click the chat icon in the app sidebar
-3. Paste your key when prompted
-
-Your key is stored only in your browser's local storage — it is never sent to any server other than Google's API.
-
-## Progressive Web App
-
-The app is installable as a PWA with offline support. On supported browsers, users can add it to their home screen for a native-like experience. The service worker auto-updates when new content is deployed — no manual refresh needed.
+| Layer | Technology |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build | Vite 7 |
+| Styling | Tailwind CSS v4 |
+| State | Zustand (persisted) |
+| Routing | react-router-dom v7 |
+| Icons | lucide-react |
+| Math | KaTeX |
+| Charts | Recharts |
+| AI Tutor | Google Gemini API |
+| PWA | vite-plugin-pwa |
+| Testing | Vitest + Testing Library |
 
 ## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Install & Run
 
 ```bash
 # Install dependencies
 npm install
 
-# Start dev server (localhost:5173)
-npm run dev        # or: npm start
+# Start development server
+npm run dev
 
-# Production build (TypeScript check + Vite bundle)
+# Build for production
 npm run build
 
-# Lint
-npm run lint
+# Run tests
+npm test
 
-# Preview production build locally
+# Preview production build
 npm run preview
 ```
 
-## Tech Stack
+### AI Tutor Setup
 
-- **React 19** + **TypeScript** — UI framework and type safety
-- **Vite 7** — Build tool and dev server
-- **Tailwind CSS 4** — Utility-first styling with custom `engineering-blue` palette
-- **KaTeX** — LaTeX math rendering
-- **Recharts** — Charts and data visualization
-- **Lucide React** — Icons
-- **React Router DOM 7** — Client-side routing
-- **Google Generative AI** — Optional AI tutor (Gemini)
-- **vite-plugin-pwa** — Service worker generation and offline caching
+The AI Tutor uses Google Gemini. To enable it:
+
+1. Get a free API key from [Google AI Studio](https://aistudio.google.com)
+2. Click the chat icon in the app sidebar
+3. Enter your API key when prompted (stored in localStorage only)
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── common/           — Reusable: AiTutor, MathWrapper, ConceptCheck, Tabs, CollapsibleSection, etc.
+│   ├── layout/           — Layout shell, Sidebar, ErrorBoundary
+│   └── modules/          — Page-level components (lazy-loaded, some with subdirectories)
+│       ├── ComponentPhysics/
+│       ├── InteractiveLab/
+│       └── TimeDomain/
+├── constants/            — Cross-module URLs
+├── hooks/                — useOnlineStatus
+├── store/                — Zustand stores (theme + progress)
+├── types/                — TypeScript interfaces (CircuitType, DampingType)
+└── utils/                — Math/physics (componentMath, circuitSolver), cn()
+```
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Vite dev server with HMR |
+| `npm run build` | TypeScript check + production build |
+| `npm run lint` | ESLint with jsx-a11y accessibility rules |
+| `npm test` | Run Vitest test suite |
+| `npm run preview` | Serve production build locally |
+
+## Cross-Module Features
+
+- **Unified dark mode** — Theme preference syncs across all three modules via shared `emac-theme` localStorage key
+- **Cross-module navigation** — Links between modules via configurable environment variables (see `.env.example`)
+- **Consistent pedagogy** — All modules use PredictionGate, ConceptCheck, CollapsibleSection, and "Think it Through" Socratic tutor
+- **Progress persistence** — Section visits, concept checks, and prediction gates tracked in localStorage (`emac-m2-progress`)
 
 ## Deployment
 
-This repo includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that auto-deploys to GitHub Pages on every push to `main`. The pipeline runs lint, type-check, and build before deploying. A `404.html` fallback is generated so that client-side routes work on direct navigation.
+Auto-deploys to GitHub Pages on push to `main` via `.github/workflows/deploy.yml`. The CI pipeline runs lint, type-check, and build before deploying. A `404.html` fallback is generated for SPA client-side routing.
 
 **Setup:**
 1. Go to **Settings > Pages** in your GitHub repo
 2. Under **Build and deployment > Source**, select **GitHub Actions**
 3. Push to `main` — the workflow builds and deploys automatically
 
-## Cross-Module Features
+## Disclaimer
 
-- **Unified dark mode** — Theme preference syncs across all three modules via shared `emac-theme` localStorage key
-- **Cross-module navigation** — Links between modules via configurable environment variables (see `.env.example`)
-- **Consistent pedagogy** — All modules use ConceptCheck, CollapsibleSection, and "Think it Through" Socratic tutor
-- **Progress persistence** — Section visits, concept checks, and prediction gates tracked in localStorage (`emac-m2-progress`)
+This educational application was architected and generated using AI models. While designed to align with rigorous engineering standards, it may contain errors or simplifications. **Always cross-reference** all formulas, diagrams, and explanations with your official course reference books.
 
 ## License
 
