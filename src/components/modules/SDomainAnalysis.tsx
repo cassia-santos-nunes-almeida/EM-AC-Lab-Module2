@@ -18,11 +18,11 @@ function TheoryTab() {
     <div className="space-y-6">
       <FigureImage
         className="mb-6"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Bode_plot.svg/640px-Bode_plot.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Asymptotic_Bode_plot.svg/500px-Asymptotic_Bode_plot.svg.png"
         alt="Bode plot showing magnitude and phase response"
         caption="A Bode plot: frequency response directly derivable from the transfer function H(s)."
         attribution="Wikimedia Commons, Public Domain"
-        sourceUrl="https://commons.wikimedia.org/wiki/File:Bode_plot.svg"
+        sourceUrl="https://commons.wikimedia.org/wiki/File:Asymptotic_Bode_plot.svg"
       />
 
       <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">

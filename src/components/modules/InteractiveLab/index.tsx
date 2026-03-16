@@ -524,7 +524,7 @@ export function InteractiveLab() {
 
       <FigureImage
         className="mb-6"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Fluke_87_V_on_holder.jpg/440px-Fluke_87_V_on_holder.jpg"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Fluke_87_V_on_holder.jpg/500px-Fluke_87_V_on_holder.jpg"
         alt="Digital multimeter on a lab bench"
         caption="A digital multimeter: the interactive lab below simulates the same measurements you'd make with real instruments."
         attribution="Wikimedia Commons, CC BY-SA 4.0"

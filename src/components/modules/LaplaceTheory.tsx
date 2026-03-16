@@ -16,7 +16,7 @@ function TheoryTab() {
     <div className="space-y-6">
       <FigureImage
         className="mb-6"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Pierre-Simon_Laplace.jpg/440px-Pierre-Simon_Laplace.jpg"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Pierre-Simon_Laplace.jpg/500px-Pierre-Simon_Laplace.jpg"
         alt="Portrait of Pierre-Simon Laplace"
         caption="Pierre-Simon Laplace (1749–1827): his integral transform converts differential equations into algebraic ones."
         attribution="Public Domain — Wikimedia Commons"
