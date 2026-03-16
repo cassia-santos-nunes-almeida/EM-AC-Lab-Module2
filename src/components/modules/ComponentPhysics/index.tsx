@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { ModuleNavigation } from '../../common/ModuleNavigation';
+import { ModuleNavigation } from '@/components/common/ModuleNavigation';
 import {
   calculateResistance,
   calculateCapacitance,
   calculateInductance,
-} from '../../../utils/componentMath';
+} from '@/utils/componentMath';
 import { ResistorSection } from './ResistorSection';
 import { CapacitorSection } from './CapacitorSection';
 import { InductorSection } from './InductorSection';
-import { SectionHook } from '../../common/SectionHook';
-import { useProgressStore } from '../../../store/progressStore';
+import { SectionHook } from '@/components/common/SectionHook';
+import { useProgressStore } from '@/store/progressStore';
 
 type ComponentType = 'resistor' | 'capacitor' | 'inductor';
 

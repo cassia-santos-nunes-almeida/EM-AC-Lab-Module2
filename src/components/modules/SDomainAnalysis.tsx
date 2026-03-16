@@ -10,7 +10,7 @@ import { ConceptCheck } from '../common/ConceptCheck';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { SectionHook } from '../common/SectionHook';
-import { useProgressStore } from '../../store/progressStore';
+import { useProgressStore } from '@/store/progressStore';
 
 function TheoryTab() {
   return (

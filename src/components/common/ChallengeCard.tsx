@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Lightbulb, Check } from 'lucide-react';
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export interface Challenge {
   id: string;

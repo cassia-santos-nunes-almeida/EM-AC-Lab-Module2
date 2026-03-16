@@ -1,21 +1,21 @@
 import { useState, useMemo, useDeferredValue, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { calculateCircuitResponse, calculateTransferFunction, type CircuitType, type InputType, type CircuitResponse } from '../../../utils/circuitSolver';
-import { dampingLabel } from '../../../types/circuit';
-import { MathWrapper } from '../../common/MathWrapper';
-import { ResponseChartTooltip } from '../../common/CircuitCharts';
-import { CircuitParameterSliders } from '../../common/CircuitParameterSliders';
-import { CollapsibleSection } from '../../common/CollapsibleSection';
-import { ChallengeCard } from '../../common/ChallengeCard';
-import { ConceptCheck } from '../../common/ConceptCheck';
-import { ModuleNavigation } from '../../common/ModuleNavigation';
+import { calculateCircuitResponse, calculateTransferFunction, type CircuitType, type InputType, type CircuitResponse } from '@/utils/circuitSolver';
+import { dampingLabel } from '@/types/circuit';
+import { MathWrapper } from '@/components/common/MathWrapper';
+import { ResponseChartTooltip } from '@/components/common/CircuitCharts';
+import { CircuitParameterSliders } from '@/components/common/CircuitParameterSliders';
+import { CollapsibleSection } from '@/components/common/CollapsibleSection';
+import { ChallengeCard } from '@/components/common/ChallengeCard';
+import { ConceptCheck } from '@/components/common/ConceptCheck';
+import { ModuleNavigation } from '@/components/common/ModuleNavigation';
 import { CircuitDiagram } from './CircuitDiagram';
 import { SDomainPanel } from './SDomainPanel';
 import { getChallenges } from './challenges';
-import { useThemeStore, useProgressStore } from '../../../store/progressStore';
-import { SectionHook } from '../../common/SectionHook';
-import { PredictionGate } from '../../common/PredictionGate';
-import { classifyDamping } from '../../../types/circuit';
+import { useThemeStore, useProgressStore } from '@/store/progressStore';
+import { SectionHook } from '@/components/common/SectionHook';
+import { PredictionGate } from '@/components/common/PredictionGate';
+import { classifyDamping } from '@/types/circuit';
 
 /** Circuit equations panel showing formulas for the selected circuit/input type (F24). */
 function CircuitEquations({ circuitType, inputType, response }: {

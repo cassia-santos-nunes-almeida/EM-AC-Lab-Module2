@@ -4,7 +4,7 @@ import { MathWrapper } from '../common/MathWrapper';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { Link } from 'react-router-dom';
-import { useProgressStore } from '../../store/progressStore';
+import { useProgressStore } from '@/store/progressStore';
 
 const learningPath = [
   {

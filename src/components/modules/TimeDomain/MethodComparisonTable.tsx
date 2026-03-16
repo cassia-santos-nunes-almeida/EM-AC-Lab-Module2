@@ -1,4 +1,4 @@
-import { MathWrapper } from '../../common/MathWrapper';
+import { MathWrapper } from '@/components/common/MathWrapper';
 
 export function MethodComparisonTable() {
   return (

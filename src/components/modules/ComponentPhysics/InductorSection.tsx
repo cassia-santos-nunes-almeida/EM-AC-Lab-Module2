@@ -1,9 +1,9 @@
-import { MathWrapper } from '../../common/MathWrapper';
+import { MathWrapper } from '@/components/common/MathWrapper';
 import { ComponentSectionLayout } from './ComponentSectionLayout';
 import {
   inductanceFormula,
   materials,
-} from '../../../utils/componentMath';
+} from '@/utils/componentMath';
 
 export function InductorSection({
   turns,

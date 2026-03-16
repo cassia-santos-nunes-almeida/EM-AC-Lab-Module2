@@ -1,6 +1,6 @@
 import { RotateCcw } from 'lucide-react';
 import { RCritMarker, DurationControl } from './CircuitCharts';
-import type { CircuitType } from '../../types/circuit';
+import type { CircuitType } from '@/types/circuit';
 
 interface SliderProps {
   R: number;

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { MathWrapper } from '../../common/MathWrapper';
-import { PoleTooltip } from '../../common/CircuitCharts';
-import { PredictionGate } from '../../common/PredictionGate';
-import type { Complex } from '../../../types/circuit';
+import { MathWrapper } from '@/components/common/MathWrapper';
+import { PoleTooltip } from '@/components/common/CircuitCharts';
+import { PredictionGate } from '@/components/common/PredictionGate';
+import type { Complex } from '@/types/circuit';
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine,

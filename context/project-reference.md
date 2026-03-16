@@ -20,10 +20,12 @@ Detailed technical reference. For quick context, see `CLAUDE.md` instead.
 | Linting | ESLint 9 | flat config | react-hooks, react-refresh, typescript-eslint |
 | Deploy | GitHub Pages | — | GitHub Actions on push to `main` |
 
+| Testing | Vitest | — | 78 unit tests (`npm test`) |
+| State | Zustand | — | `useThemeStore` + `useProgressStore`, persisted to localStorage |
+| PWA | vite-plugin-pwa | — | Service worker, offline caching, auto-update |
+
 ### Not Present
 
-- No test framework
-- No state management library (all local `useState`)
 - No backend / server-side code
 
 ---
