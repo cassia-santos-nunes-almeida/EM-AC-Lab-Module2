@@ -18,14 +18,22 @@ Interactive learning platform for analog circuit analysis. React 19 + TypeScript
 ## Architecture
 
 - `src/types/circuit.ts` — Shared type definitions (CircuitType, DampingType, classifyDamping). Single source of truth.
-- `src/store/progressStore.ts` — Zustand stores: `useThemeStore` (persisted to `emac-theme`, shared across modules) + `useProgressStore` (persisted to `emac-m2-progress`)
-- `src/components/modules/` — Page-level components, lazy-loaded via React.lazy. Large modules use subdirectory structure (e.g., `InteractiveLab/index.tsx` + `InteractiveLab/CircuitDiagram.tsx`).
-- `src/components/layout/` — Layout (responsive with mobile sidebar), Sidebar (navigation + dark mode toggle), ErrorBoundary
-- `src/components/common/` — Shared components (AiTutor, CircuitCharts, CircuitParameterSliders, MathWrapper, Tabs, ConceptCheck, CollapsibleSection, ChallengeCard)
+- `src/store/progressStore.ts` — Zustand theme store (persisted to localStorage)
+- `src/hooks/` — Shared hooks (`useOnlineStatus.ts` for navigator.onLine via useSyncExternalStore)
+- `src/components/modules/` — Page-level components, lazy-loaded via React.lazy for code-splitting. Large modules use subdirectory structure (e.g., `InteractiveLab/index.tsx` + `InteractiveLab/CircuitDiagram.tsx`).
+- `src/components/layout/` — Layout (responsive with mobile sidebar + offline banner), Sidebar (navigation + dark mode toggle), ErrorBoundary
+- `src/components/common/` — Shared components (AiTutor, CircuitCharts, CircuitParameterSliders, MathWrapper, Tabs, CollapsibleSection, ChallengeCard, ConceptCheck, ModuleNavigation, PredictionGate, SectionHook, TableOfContents)
 - `src/utils/` — Math/physics calculations (componentMath.ts, circuitSolver.ts), utility helpers (cn.ts)
 - `src/constants/modules.ts` — Cross-module URLs (reads `VITE_MODULE*_URL` env vars)
 - `src/App.tsx` — Main app with React Router + Suspense code-splitting
 - `src/main.tsx` — Entry point
+
+### Key Patterns
+
+- **URL param sync** — InteractiveLab syncs circuit config (type, input, R, L, C, V) to URL search params via `useSearchParams` + `useDeferredValue`. Enables shareable lab links. Pattern is inline — extract to a `useShareableParams` hook if adding to more modules.
+- **Chart export** — InteractiveLab has SVG→Canvas→PNG export (2x resolution, dark/light aware). Pattern is inline in `handleDownloadChart` — extract to `useChartExport` hook or `ChartToolbar` component if reusing.
+- **Active recall** — ConceptCheck (multiple-choice + predict-reveal), ChallengeCard (auto-check with hints), PredictionGate (predict-before-reveal wrapper). Used across all modules.
+- **Progressive disclosure** — CollapsibleSection wraps secondary content. Experiment tips, equations, worked examples default-closed to reduce scroll.
 
 ## Conventions
 
