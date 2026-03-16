@@ -14,6 +14,8 @@ export function CapacitorSection({
   onAreaChange,
   onDistanceChange,
   onPermittivityChange,
+  onConceptCheckComplete,
+  onHint,
 }: {
   area: number;
   distance: number;
@@ -22,6 +24,8 @@ export function CapacitorSection({
   onAreaChange: (v: number) => void;
   onDistanceChange: (v: number) => void;
   onPermittivityChange: (v: number) => void;
+  onConceptCheckComplete?: () => void;
+  onHint?: (tier: number) => void;
 }) {
   // Normalized to slider ranges so SVG visibly changes
   // area: 0.005–0.10 (slider 0.5–10 cm²), distance: 0.0001–0.005 (slider 0.1–5 mm)
@@ -268,7 +272,10 @@ export function CapacitorSection({
                 explanation: 'Geometry (A and d) matters, but so does the dielectric material. C = ε₀εrA/d — the relative permittivity εr is a direct multiplier on capacitance.',
               },
             ],
-          }} />
+          }}
+            onComplete={onConceptCheckComplete}
+            onHint={onHint}
+          />
       </>}
     />
   );

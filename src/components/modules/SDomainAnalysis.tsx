@@ -14,6 +14,9 @@ import { FigureImage } from '@/components/common/FigureImage';
 import { useProgressStore } from '@/store/progressStore';
 
 function TheoryTab() {
+  const incrementConceptChecks = useProgressStore((s) => s.incrementConceptChecks);
+  const incrementHints = useProgressStore((s) => s.incrementHints);
+
   return (
     <div className="space-y-6">
       <FigureImage
@@ -96,7 +99,10 @@ function TheoryTab() {
           { text: 'Stable, overdamped', correct: false, explanation: 'Overdamped systems have two distinct real poles (no imaginary part). These poles have imaginary parts ±4j, so the response oscillates → underdamped.' },
           { text: 'Stable, critically damped', correct: false, explanation: 'Critical damping requires repeated real poles (same location, no imaginary part). These are complex conjugate poles → underdamped.' },
         ],
-      }} />
+      }}
+        onComplete={() => incrementConceptChecks('s-domain')}
+        onHint={() => incrementHints('s-domain')}
+      />
 
       <Link
         to="/interactive-lab"
@@ -274,6 +280,9 @@ const readThePlotCases = [
 const poleChartColors = { grid: '#e2e8f0', text: '#475569' };
 
 function ReadThePlotTab() {
+  const incrementConceptChecks = useProgressStore((s) => s.incrementConceptChecks);
+  const incrementHints = useProgressStore((s) => s.incrementHints);
+
   return (
     <div className="space-y-8">
       <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
@@ -330,7 +339,10 @@ function ReadThePlotTab() {
             mode: 'multiple-choice',
             question: 'What time-domain behavior does this pole configuration produce?',
             options: caseData.options,
-          }} />
+          }}
+            onComplete={() => incrementConceptChecks('s-domain')}
+            onHint={() => incrementHints('s-domain')}
+          />
 
           {/* Does this make sense? callout */}
           <p className="text-xs text-slate-400 dark:text-slate-500 italic">

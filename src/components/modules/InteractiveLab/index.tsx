@@ -377,6 +377,11 @@ export function InteractiveLab() {
   }, [circuitType, inputType]);
 
   const isDark = useThemeStore((s) => s.theme) === 'dark';
+  const markVisited = useProgressStore((s) => s.markVisited);
+  const markPredictionGate = useProgressStore((s) => s.markPredictionGate);
+  const incrementConceptChecks = useProgressStore((s) => s.incrementConceptChecks);
+  const incrementHints = useProgressStore((s) => s.incrementHints);
+  useEffect(() => { markVisited('interactive-lab'); }, [markVisited]);
   const chartColors = {
     grid: isDark ? '#334155' : '#e2e8f0',
     text: isDark ? '#cbd5e1' : '#475569',
@@ -737,6 +742,7 @@ export function InteractiveLab() {
             zeta={transferFunction.zeta}
             dampingType={dampingLabel(response.dampingType)}
             chartColors={chartColors}
+            onPredict={(correct) => markPredictionGate('interactive-lab-sdomain', correct)}
           />
         </div>
       )}
@@ -759,6 +765,7 @@ export function InteractiveLab() {
             </div>
           }
           resetKey={predictionResetKey}
+          onPredict={(correct) => markPredictionGate('interactive-lab', correct)}
         >
           {chartAndAnalysis}
         </PredictionGate>
@@ -776,7 +783,10 @@ export function InteractiveLab() {
             { text: 'Yes — higher R means lower steady-state voltage', correct: false, explanation: 'At steady state, current is zero. With no current, there\'s no voltage drop across R (V_R = IR = 0), so all the source voltage appears across the capacitor: V_C = V_s.' },
             { text: 'Yes — higher R means higher steady-state voltage', correct: false, explanation: 'The steady-state voltage is always V_s for a step response, independent of R. Try it with the sliders to verify!' },
           ],
-        }} />
+        }}
+          onComplete={() => incrementConceptChecks('interactive-lab')}
+          onHint={() => incrementHints('interactive-lab')}
+        />
       )}
 
       {/* Tips (collapsible, default closed to reduce scroll) */}

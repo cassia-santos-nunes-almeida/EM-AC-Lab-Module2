@@ -12,6 +12,9 @@ import { useProgressStore } from '@/store/progressStore';
 import { LaplaceMotivation } from './LaplaceMotivation';
 
 function TheoryTab() {
+  const incrementConceptChecks = useProgressStore((s) => s.incrementConceptChecks);
+  const incrementHints = useProgressStore((s) => s.incrementHints);
+
   return (
     <div className="space-y-6">
       <FigureImage
@@ -150,12 +153,18 @@ function TheoryTab() {
           { text: 'Takes the derivative of F(s): dF/ds', correct: false, explanation: 'The derivative of F(s) with respect to s corresponds to multiplying f(t) by -t, not to differentiation in time.' },
           { text: 'Leaves it unchanged: F(s)', correct: false, explanation: 'The Laplace Transform changes the operation — differentiation in time becomes multiplication by s in the s-domain. This is the key simplification.' },
         ],
-      }} />
+      }}
+        onComplete={() => incrementConceptChecks('laplace-theory')}
+        onHint={() => incrementHints('laplace-theory')}
+      />
     </div>
   );
 }
 
 function TablesTab() {
+  const incrementConceptChecks = useProgressStore((s) => s.incrementConceptChecks);
+  const incrementHints = useProgressStore((s) => s.incrementHints);
+
   return (
     <div className="space-y-6">
       {/* Transform Pairs Table */}
@@ -244,7 +253,10 @@ function TablesTab() {
         mode: 'predict-reveal',
         question: 'What is the Laplace Transform of f(t) = 5·sin(3t)·u(t)?',
         answer: 'Using the sine transform pair: L{sin(ωt)} = ω/(s² + ω²). With the linearity property: L{5·sin(3t)} = 5 · 3/(s² + 9) = 15/(s² + 9).',
-      }} />
+      }}
+        onComplete={() => incrementConceptChecks('laplace-theory')}
+        onHint={() => incrementHints('laplace-theory')}
+      />
     </div>
   );
 }
