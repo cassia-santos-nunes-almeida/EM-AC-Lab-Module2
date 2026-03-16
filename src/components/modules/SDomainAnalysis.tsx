@@ -10,11 +10,21 @@ import { ConceptCheck } from '../common/ConceptCheck';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { SectionHook } from '../common/SectionHook';
+import { FigureImage } from '@/components/common/FigureImage';
 import { useProgressStore } from '@/store/progressStore';
 
 function TheoryTab() {
   return (
     <div className="space-y-6">
+      <FigureImage
+        className="mb-6"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Bode_plot.svg/640px-Bode_plot.svg.png"
+        alt="Bode plot showing magnitude and phase response"
+        caption="A Bode plot: frequency response directly derivable from the transfer function H(s)."
+        attribution="Wikimedia Commons, Public Domain"
+        sourceUrl="https://commons.wikimedia.org/wiki/File:Bode_plot.svg"
+      />
+
       <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">Transfer Function Fundamentals</h2>
 

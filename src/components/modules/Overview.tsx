@@ -3,6 +3,7 @@ import { MathWrapper } from '../common/MathWrapper';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { Link } from 'react-router-dom';
+import { FigureImage } from '@/components/common/FigureImage';
 import { useProgressStore } from '@/store/progressStore';
 
 const learningPath = [
@@ -369,6 +370,15 @@ export function Overview() {
           transient circuit behavior.
         </p>
       </div>
+
+      <FigureImage
+        className="mb-6"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/RLC_series_circuit_v1.svg/440px-RLC_series_circuit_v1.svg.png"
+        alt="Schematic of a series RLC circuit"
+        caption="The series RLC circuit: the fundamental building block studied throughout this module."
+        attribution="Wikimedia Commons, Public Domain"
+        sourceUrl="https://commons.wikimedia.org/wiki/File:RLC_series_circuit_v1.svg"
+      />
 
       <Tabs
         tabs={[

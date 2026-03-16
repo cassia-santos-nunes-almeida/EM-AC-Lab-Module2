@@ -9,6 +9,7 @@ import { CircuitComparisonLayout } from './CircuitComparisonLayout';
 import { MethodComparisonTable } from './MethodComparisonTable';
 import { ResponseComparisons } from './ResponseComparisons';
 import { SectionHook } from '@/components/common/SectionHook';
+import { FigureImage } from '@/components/common/FigureImage';
 import { YourTurnPanel } from '@/components/common/YourTurnPanel';
 import { useProgressStore } from '@/store/progressStore';
 import { CircuitAnalysisExercise } from '../CircuitAnalysisExercise';
@@ -38,6 +39,15 @@ export function TimeDomain() {
           Comparing time-domain differential equations with Laplace transform s-domain methods
         </p>
       </div>
+
+      <FigureImage
+        className="mb-6"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Rc_charge_discharge.svg/640px-Rc_charge_discharge.svg.png"
+        alt="RC circuit charge and discharge curves showing exponential behavior"
+        caption="RC charge and discharge: voltage rises to 63% after one time constant τ = RC."
+        attribution="Wikimedia Commons, Public Domain"
+        sourceUrl="https://commons.wikimedia.org/wiki/File:Rc_charge_discharge.svg"
+      />
 
       <TableOfContents entries={tocEntries} />
 
