@@ -14,10 +14,10 @@ import { ModuleNavigation } from '../../common/ModuleNavigation';
 import { CircuitDiagram } from './CircuitDiagram';
 import { SDomainPanel } from './SDomainPanel';
 import { getChallenges } from './challenges';
-import { useThemeStore } from '../../../store/progressStore';
-import { SectionHook } from '../../common/SectionHook';
-import { PredictionGate } from '../../common/PredictionGate';
-import { classifyDamping } from '../../../types/circuit';
+import { useThemeStore, useProgressStore } from '@/store/progressStore';
+import { SectionHook } from '@/components/common/SectionHook';
+import { PredictionGate } from '@/components/common/PredictionGate';
+import { classifyDamping } from '@/types/circuit';
 
 /** Circuit equations panel showing formulas for the selected circuit/input type (F24). */
 function CircuitEquations({ circuitType, inputType, response }: {

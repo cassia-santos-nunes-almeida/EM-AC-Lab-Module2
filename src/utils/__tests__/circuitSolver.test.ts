@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculateCircuitResponse, calculateTransferFunction } from '../circuitSolver';
-import { classifyDamping, CRITICAL_DAMPING_TOLERANCE } from '../../types/circuit';
+import { classifyDamping, CRITICAL_DAMPING_TOLERANCE } from '@/types/circuit';
 
 // Tolerance for floating-point comparisons
 const TOL = 1e-6;

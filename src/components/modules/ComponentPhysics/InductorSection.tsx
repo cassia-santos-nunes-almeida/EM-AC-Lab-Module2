@@ -4,7 +4,7 @@ import { ComponentSectionLayout } from './ComponentSectionLayout';
 import {
   inductanceFormula,
   materials,
-} from '../../../utils/componentMath';
+} from '@/utils/componentMath';
 
 export function InductorSection({
   turns,

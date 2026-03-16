@@ -1,6 +1,10 @@
 # EM&AC Lab — Module 2: Circuit Analysis
 
-Interactive learning platform for electromagnetics and analog circuit analysis. React 19 + TypeScript app built with Vite. Installable as a PWA with offline support.
+Part of the three-module EM&AC Lab course: M1 (EM Fundamentals) → **M2 (Circuit Analysis)** → M3 (Transmission Lines & Antennas).
+
+> **Shared conventions:** See `COURSE_GUIDELINES.md` for cross-module patterns, lessons learned, and pedagogical guidelines.
+
+Interactive learning platform for analog circuit analysis. React 19 + TypeScript app built with Vite. Installable as a PWA with offline support.
 
 ## Build & Dev
 
@@ -8,7 +12,7 @@ Interactive learning platform for electromagnetics and analog circuit analysis. 
 - `npm run build` — TypeScript check + production build (`tsc -b && vite build`)
 - `npm run lint` — ESLint (includes jsx-a11y accessibility checks)
 - `npm run preview` — Preview production build locally
-- `npm test` — Run Vitest test suite
+- `npm test` — Run Vitest test suite (78 tests)
 - `npm run test:watch` — Run Vitest in watch mode
 
 ## Architecture
@@ -20,6 +24,7 @@ Interactive learning platform for electromagnetics and analog circuit analysis. 
 - `src/components/layout/` — Layout (responsive with mobile sidebar + offline banner), Sidebar (navigation + dark mode toggle), ErrorBoundary
 - `src/components/common/` — Shared components (AiTutor, CircuitCharts, CircuitParameterSliders, MathWrapper, Tabs, CollapsibleSection, ChallengeCard, ConceptCheck, ModuleNavigation, PredictionGate, SectionHook, TableOfContents)
 - `src/utils/` — Math/physics calculations (componentMath.ts, circuitSolver.ts), utility helpers (cn.ts)
+- `src/constants/modules.ts` — Cross-module URLs (reads `VITE_MODULE*_URL` env vars)
 - `src/App.tsx` — Main app with React Router + Suspense code-splitting
 - `src/main.tsx` — Entry point
 
@@ -40,11 +45,14 @@ Interactive learning platform for electromagnetics and analog circuit analysis. 
 - React Router for navigation
 - vite-plugin-pwa for service worker generation and offline caching (auto-update strategy)
 - Optional Google Generative AI integration for AI tutor (API key in localStorage only)
+- Cross-module URLs via `src/constants/modules.ts` (configurable in `.env`)
+- Dark mode: shared `emac-theme` localStorage key across all three modules
 
-## Current Sprint
+## Cross-Module Integration
 
-See `context/current-sprint.md` for detailed status.
-Goal: Feature completeness and reusability — extract shareable URL/chart export patterns, extend to other modules, consider meaningful progress tracking.
+- **Dark mode**: Shared `emac-theme` localStorage key — toggling in any module affects all three
+- **Navigation**: `src/constants/modules.ts` provides URLs to M1 and M3
+- **Content bridges**: Laplace transforms → M3 impedance analysis; Component physics ← M1 magnetic circuits
 
 ## Skills
 
@@ -54,8 +62,9 @@ When building or improving frontend UI/UX → read `skills/frontend-design/SKILL
 ## Context Files
 
 - `context/current-sprint.md` — What's being built right now
-- `context/decisions.md` — Architecture decision log
+- `context/decisions.md` — Architecture decision log (28 ADRs)
 - `context/known-issues.md` — Active bugs and technical debt
+- `context/project-reference.md` — Detailed technical reference
 
 ## Do Not Touch
 

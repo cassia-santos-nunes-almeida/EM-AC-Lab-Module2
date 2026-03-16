@@ -3,6 +3,7 @@ import { MathWrapper } from '../common/MathWrapper';
 import { Tabs } from '../common/Tabs';
 import { ModuleNavigation } from '../common/ModuleNavigation';
 import { Link } from 'react-router-dom';
+import { useProgressStore } from '@/store/progressStore';
 
 const learningPath = [
   {
@@ -348,6 +349,9 @@ function ReviewTab() {
 }
 
 export function Overview() {
+  const markVisited = useProgressStore((s) => s.markVisited);
+  useEffect(() => { markVisited('overview'); }, [markVisited]);
+
   return (
     <div className="space-y-8">
       {/* Hero header */}

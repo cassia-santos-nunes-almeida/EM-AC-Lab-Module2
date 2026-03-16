@@ -60,7 +60,7 @@ export const laplaceProperties = [
   { property: 'Integration', formula: '\\mathcal{L}\\{\\int_0^t f(\\tau)d\\tau\\} = \\frac{F(s)}{s}' },
   { property: 'Time Scaling', formula: '\\mathcal{L}\\{f(at)\\} = \\frac{1}{a}F(\\frac{s}{a})' },
   { property: 'Initial Value', formula: '\\lim_{t \\to 0^+} f(t) = \\lim_{s \\to \\infty} sF(s)' },
-  { property: 'Final Value', formula: '\\lim_{t \\to \\infty} f(t) = \\lim_{s \\to 0} sF(s)' },
+  { property: 'Final Value', formula: '\\lim_{t \\to \\infty} f(t) = \\lim_{s \\to 0} sF(s)', caveat: 'Valid only if all poles of sF(s) have negative real parts (system is stable). Do not apply to unstable or marginally stable systems.' },
 ];
 
 export interface MaterialProperty {
@@ -68,6 +68,7 @@ export interface MaterialProperty {
   resistivity?: number;
   permittivity?: number;
   permeability?: number;
+  note?: string;
 }
 
 export const materials: MaterialProperty[] = [
@@ -75,7 +76,7 @@ export const materials: MaterialProperty[] = [
   { name: 'Aluminum', resistivity: 2.65e-8, permeability: 1.256665e-6 },
   { name: 'Silver', resistivity: 1.59e-8, permeability: 1.256629e-6 },
   { name: 'Gold', resistivity: 2.44e-8, permeability: 1.256629e-6 },
-  { name: 'Iron', resistivity: 9.71e-8, permeability: 6.3e-3 },
+  { name: 'Iron', resistivity: 9.71e-8, permeability: 6.3e-3, note: 'Typical value at moderate flux density. Iron is nonlinear: \u03BCr varies from ~100 (saturation) to ~10,000 (low flux). A full model requires the B-H curve.' },
   { name: 'Air', permittivity: 8.854e-12, permeability: 1.257e-6 },
   { name: 'Paper', permittivity: 3.7e-11 },
   { name: 'Teflon', permittivity: 2.1e-11 },

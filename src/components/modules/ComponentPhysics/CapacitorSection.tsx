@@ -4,7 +4,7 @@ import { ComponentSectionLayout } from './ComponentSectionLayout';
 import {
   capacitanceFormula,
   materials,
-} from '../../../utils/componentMath';
+} from '@/utils/componentMath';
 
 export function CapacitorSection({
   area,
