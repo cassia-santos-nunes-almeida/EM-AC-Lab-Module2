@@ -1,5 +1,7 @@
 import { useState, useMemo, useDeferredValue, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { clampNum, parseEnum, useUrlSync, useCopyLink } from '@/hooks/useShareableParams';
+import { useChartExport } from '@/hooks/useChartExport';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { Download, Link2 } from 'lucide-react';
 import { calculateCircuitResponse, calculateTransferFunction, type CircuitType, type InputType, type CircuitResponse } from '../../../utils/circuitSolver';
@@ -297,24 +299,15 @@ function FirstOrderAnalysisPanel({ circuitType, response, R, L, C }: {
 const CIRCUIT_TYPES: CircuitType[] = ['RC', 'RL', 'RLC'];
 const INPUT_TYPES: InputType[] = ['step', 'impulse'];
 
-function clampNum(raw: string | null, min: number, max: number, fallback: number): number {
-  if (raw === null) return fallback;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  return Math.max(min, Math.min(max, n));
-}
+
 
 export function InteractiveLab() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  const [circuitType, setCircuitType] = useState<CircuitType>(() => {
-    const ct = searchParams.get('circuit');
-    return ct && CIRCUIT_TYPES.includes(ct as CircuitType) ? ct as CircuitType : 'RLC';
-  });
-  const [inputType, setInputType] = useState<InputType>(() => {
-    const it = searchParams.get('input');
-    return it && INPUT_TYPES.includes(it as InputType) ? it as InputType : 'step';
-  });
+  const [circuitType, setCircuitType] = useState<CircuitType>(() =>
+    parseEnum(searchParams.get('circuit'), CIRCUIT_TYPES, 'RLC'));
+  const [inputType, setInputType] = useState<InputType>(() =>
+    parseEnum(searchParams.get('input'), INPUT_TYPES, 'step'));
   const [R, setR] = useState(() => clampNum(searchParams.get('R'), 1, 10000, 100));
   const [L, setL] = useState(() => clampNum(searchParams.get('L'), 0.001, 1, 0.1));
   const [C, setC] = useState(() => clampNum(searchParams.get('C'), 1e-6, 1e-3, 0.0001));
@@ -324,57 +317,17 @@ export function InteractiveLab() {
   const [showCurrent, setShowCurrent] = useState(true);
   const [showVoltage, setShowVoltage] = useState(true);
   const [showSDomain, setShowSDomain] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
 
-  // Sync state → URL params (debounced to avoid thrashing during slider drag)
+  // Sync state → URL params (debounced via useDeferredValue)
   const dRForUrl = useDeferredValue(R);
   const dLForUrl = useDeferredValue(L);
   const dCForUrl = useDeferredValue(C);
   const dVForUrl = useDeferredValue(voltage);
-  useEffect(() => {
-    setSearchParams({
-      circuit: circuitType,
-      input: inputType,
-      R: String(dRForUrl),
-      L: String(dLForUrl),
-      C: String(dCForUrl),
-      V: String(dVForUrl),
-    }, { replace: true });
-  }, [circuitType, inputType, dRForUrl, dLForUrl, dCForUrl, dVForUrl, setSearchParams]);
+  useUrlSync({ circuit: circuitType, input: inputType, R: dRForUrl, L: dLForUrl, C: dCForUrl, V: dVForUrl });
 
-  const handleCopyLink = useCallback(() => {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 2000);
-    });
-  }, []);
-
-  const handleDownloadChart = useCallback(() => {
-    const container = chartRef.current;
-    if (!container) return;
-    const svg = container.querySelector('svg.recharts-surface');
-    if (!svg) return;
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const rect = svg.getBoundingClientRect();
-    canvas.width = rect.width * 2;
-    canvas.height = rect.height * 2;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.scale(2, 2);
-    const img = new Image();
-    img.onload = () => {
-      ctx.fillStyle = document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, rect.width, rect.height);
-      const a = document.createElement('a');
-      a.download = `${circuitType}-${inputType}-response.png`;
-      a.href = canvas.toDataURL('image/png');
-      a.click();
-    };
-    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
-  }, [circuitType, inputType]);
+  const { copyLink: handleCopyLink, linkCopied } = useCopyLink();
+  const handleDownloadChart = useChartExport(chartRef, `${circuitType}-${inputType}-response`);
 
   const isDark = useThemeStore((s) => s.theme) === 'dark';
   const markVisited = useProgressStore((s) => s.markVisited);
