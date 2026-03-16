@@ -1,7 +1,9 @@
 import { MathWrapper } from '../common/MathWrapper';
 import { PredictionGate } from '../common/PredictionGate';
+import { useProgressStore } from '@/store/progressStore';
 
 export function LaplaceMotivation() {
+  const markPredictionGate = useProgressStore((s) => s.markPredictionGate);
   return (
     <section className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
       <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-3">
@@ -27,6 +29,7 @@ export function LaplaceMotivation() {
           { id: '7+', label: '7+ steps' },
         ]}
         getCorrectAnswer={() => '4-6'}
+        onPredict={(correct) => markPredictionGate('laplace-motivation', correct)}
         explanation={
           <p>
             The classical approach requires separation of variables, integration of both sides,

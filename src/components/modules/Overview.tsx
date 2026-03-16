@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Target, Compass, AlertTriangle, Scale, Zap, Clock, FunctionSquare, GitBranch, FlaskConical, ArrowRight, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { MathWrapper } from '../common/MathWrapper';
 import { Tabs } from '../common/Tabs';

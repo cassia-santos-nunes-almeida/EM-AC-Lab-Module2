@@ -25,6 +25,8 @@ const tocEntries = [
 
 export function TimeDomain() {
   const markVisited = useProgressStore((s) => s.markVisited);
+  const incrementConceptChecks = useProgressStore((s) => s.incrementConceptChecks);
+  const incrementHints = useProgressStore((s) => s.incrementHints);
   useEffect(() => { markVisited('circuit-analysis'); }, [markVisited]);
 
   const [selectedCircuit, setSelectedCircuit] = useState<CircuitType>('RC');
@@ -77,21 +79,30 @@ export function TimeDomain() {
           mode: 'predict-reveal',
           question: 'If you double R in an RC circuit, what happens to the time constant τ?',
           answer: 'τ = RC, so doubling R doubles the time constant. The circuit responds twice as slowly — it takes twice as long to reach 63.2% of the final value.',
-        }} />
+        }}
+          onComplete={() => incrementConceptChecks('circuit-analysis')}
+          onHint={() => incrementHints('circuit-analysis')}
+        />
       )}
       {selectedCircuit === 'RL' && (
         <ConceptCheck data={{
           mode: 'predict-reveal',
           question: 'If you double R in an RL circuit, what happens to the time constant τ?',
           answer: 'τ = L/R, so doubling R halves the time constant. The circuit responds twice as fast — opposite to the RC case! This is because higher R dissipates energy faster.',
-        }} />
+        }}
+          onComplete={() => incrementConceptChecks('circuit-analysis')}
+          onHint={() => incrementHints('circuit-analysis')}
+        />
       )}
       {selectedCircuit === 'RLC' && (
         <ConceptCheck data={{
           mode: 'predict-reveal',
           question: 'For a 3rd-order circuit, which method (time-domain or s-domain) would be easier and why?',
           answer: 'The s-domain method is much easier. A 3rd-order circuit requires solving a 3rd-order ODE in the time domain (very tedious), but in the s-domain it\'s just a 3rd-degree polynomial in s — solve algebraically, find poles, and inverse-transform.',
-        }} />
+        }}
+          onComplete={() => incrementConceptChecks('circuit-analysis')}
+          onHint={() => incrementHints('circuit-analysis')}
+        />
       )}
 
       <CollapsibleSection title="Method Comparison" defaultOpen={true} className="scroll-mt-4" id="method-comparison">
@@ -105,7 +116,10 @@ export function TimeDomain() {
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
           Systematic Analysis Practice
         </h2>
-        <CircuitAnalysisExercise />
+        <CircuitAnalysisExercise
+          onConceptCheckComplete={() => incrementConceptChecks('circuit-analysis')}
+          onHint={() => incrementHints('circuit-analysis')}
+        />
       </section>
 
       <ModuleNavigation />

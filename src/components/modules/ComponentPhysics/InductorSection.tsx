@@ -16,6 +16,8 @@ export function InductorSection({
   onAreaChange,
   onLengthChange,
   onPermeabilityChange,
+  onConceptCheckComplete,
+  onHint,
 }: {
   turns: number;
   area: number;
@@ -26,6 +28,8 @@ export function InductorSection({
   onAreaChange: (v: number) => void;
   onLengthChange: (v: number) => void;
   onPermeabilityChange: (v: number) => void;
+  onConceptCheckComplete?: () => void;
+  onHint?: (tier: number) => void;
 }) {
   const coilR = Math.max(Math.sqrt(area * 10000) * 35, 18); // ellipse ry, 18–70
   const coilW = length * 500; // total coil width px
@@ -237,7 +241,10 @@ export function InductorSection({
                 explanation: 'N enters the formula as N², not √N. Doubling N gives 2² = 4 times the inductance. The squared relationship comes from mutual coupling between turns.',
               },
             ],
-          }} />
+          }}
+            onComplete={onConceptCheckComplete}
+            onHint={onHint}
+          />
       </>}
     />
   );

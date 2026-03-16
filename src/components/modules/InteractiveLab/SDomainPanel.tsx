@@ -17,11 +17,12 @@ interface SDomainPanelProps {
   zeta: number;
   dampingType: string;
   chartColors: { grid: string; text: string; legend: string };
+  onPredict?: (correct: boolean) => void;
 }
 
 export function SDomainPanel({
   poles, numerator, denominator,
-  alpha, omega0, zeta, dampingType, chartColors,
+  alpha, omega0, zeta, dampingType, chartColors, onPredict,
 }: SDomainPanelProps) {
   const poleData = poles.map((pole, idx) => ({
     x: pole.real,
@@ -129,6 +130,7 @@ export function SDomainPanel({
           </div>
         }
         resetKey={poleResetKey}
+        onPredict={onPredict}
       >
       <div>
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">S-Plane Pole-Zero Map</h3>

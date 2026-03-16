@@ -16,6 +16,8 @@ type ComponentType = 'resistor' | 'capacitor' | 'inductor';
 
 export function ComponentPhysics() {
   const markVisited = useProgressStore((s) => s.markVisited);
+  const incrementConceptChecks = useProgressStore((s) => s.incrementConceptChecks);
+  const incrementHints = useProgressStore((s) => s.incrementHints);
   useEffect(() => { markVisited('component-physics'); }, [markVisited]);
 
   const [activeComponent, setActiveComponent] = useState<ComponentType>('resistor');
@@ -101,6 +103,8 @@ export function ComponentPhysics() {
           onLengthChange={setResistorLength}
           onAreaChange={setResistorArea}
           onResistivityChange={setResistorMaterial}
+          onConceptCheckComplete={() => incrementConceptChecks('component-physics')}
+          onHint={() => incrementHints('component-physics')}
         />
       )}
 
@@ -113,6 +117,8 @@ export function ComponentPhysics() {
           onAreaChange={setCapacitorArea}
           onDistanceChange={setCapacitorDistance}
           onPermittivityChange={setCapacitorPermittivity}
+          onConceptCheckComplete={() => incrementConceptChecks('component-physics')}
+          onHint={() => incrementHints('component-physics')}
         />
       )}
 
@@ -127,6 +133,8 @@ export function ComponentPhysics() {
           onAreaChange={setInductorArea}
           onLengthChange={setInductorLength}
           onPermeabilityChange={setInductorPermeability}
+          onConceptCheckComplete={() => incrementConceptChecks('component-physics')}
+          onHint={() => incrementHints('component-physics')}
         />
       )}
 

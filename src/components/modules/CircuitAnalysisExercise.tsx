@@ -1,7 +1,7 @@
 import { MathWrapper } from '../common/MathWrapper';
 import { ConceptCheck } from '../common/ConceptCheck';
 
-export function CircuitAnalysisExercise() {
+export function CircuitAnalysisExercise({ onConceptCheckComplete, onHint }: { onConceptCheckComplete?: () => void; onHint?: (tier: number) => void }) {
   return (
     <div className="space-y-8">
       {/* Problem 1: Series RLC — KVL */}
@@ -18,6 +18,8 @@ export function CircuitAnalysisExercise() {
           </p>
         </div>
         <ConceptCheck
+          onComplete={onConceptCheckComplete}
+          onHint={onHint}
           data={{
             mode: 'multiple-choice',
             question: 'Which equation correctly represents KVL around the loop?',
@@ -65,6 +67,8 @@ export function CircuitAnalysisExercise() {
           </p>
         </div>
         <ConceptCheck
+          onComplete={onConceptCheckComplete}
+          onHint={onHint}
           data={{
             mode: 'multiple-choice',
             question: 'Which equation correctly represents KCL at the top node?',
@@ -111,6 +115,8 @@ export function CircuitAnalysisExercise() {
           </p>
         </div>
         <ConceptCheck
+          onComplete={onConceptCheckComplete}
+          onHint={onHint}
           data={{
             mode: 'multiple-choice',
             question: 'What is the correct first-order ODE for the current i(t)?',

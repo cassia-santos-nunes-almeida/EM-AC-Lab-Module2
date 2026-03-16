@@ -14,6 +14,8 @@ export function ResistorSection({
   onLengthChange,
   onAreaChange,
   onResistivityChange,
+  onConceptCheckComplete,
+  onHint,
 }: {
   length: number;
   area: number;
@@ -22,6 +24,8 @@ export function ResistorSection({
   onLengthChange: (v: number) => void;
   onAreaChange: (v: number) => void;
   onResistivityChange: (v: number) => void;
+  onConceptCheckComplete?: () => void;
+  onHint?: (tier: number) => void;
 }) {
   const bodyW = 40 + length * 100; // 40–240 px
   const bodyH = Math.max(20 + Math.sqrt(area * 1e6) * 16, 24); // height responds to area
@@ -213,7 +217,10 @@ export function ResistorSection({
                 explanation: 'Cross-sectional area directly affects resistance. R = ρL/A shows that area is in the denominator — bigger area means lower resistance.',
               },
             ],
-          }} />
+          }}
+            onComplete={onConceptCheckComplete}
+            onHint={onHint}
+          />
       </>}
     />
   );
