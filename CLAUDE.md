@@ -1,8 +1,8 @@
 # EM&AC Lab — Module 2: Circuit Analysis
 
-Part of the three-module EM&AC Lab course: M1 (EM Fundamentals) → **M2 (Circuit Analysis)** → M3 (Transmission Lines & Antennas).
+> **Global rules:** see `../CLAUDE.md`. **Recurring corrections:** see `../PATTERNS.md`. **Session state:** see `../SESSION.md`.
 
-> **Shared conventions:** See `COURSE_GUIDELINES.md` for cross-module patterns, lessons learned, and pedagogical guidelines.
+Part of the three-module EM&AC Lab course: M1 (EM Fundamentals) → **M2 (Circuit Analysis)** → M3 (Transmission Lines & Antennas).
 
 Interactive learning platform for analog circuit analysis. React 19 + TypeScript app built with Vite. Installable as a PWA with offline support.
 
@@ -19,7 +19,7 @@ Interactive learning platform for analog circuit analysis. React 19 + TypeScript
 
 - `src/types/circuit.ts` — Shared type definitions (CircuitType, DampingType, classifyDamping). Single source of truth.
 - `src/store/progressStore.ts` — Zustand theme store (persisted to localStorage)
-- `src/hooks/` — Shared hooks (`useOnlineStatus.ts` for navigator.onLine via useSyncExternalStore)
+- `src/hooks/` — Shared hooks (`useOnlineStatus.ts`, `useShareableParams.ts`, `useChartExport.ts`)
 - `src/components/modules/` — Page-level components, lazy-loaded via React.lazy for code-splitting. Large modules use subdirectory structure (e.g., `InteractiveLab/index.tsx` + `InteractiveLab/CircuitDiagram.tsx`).
 - `src/components/layout/` — Layout (responsive with mobile sidebar + offline banner), Sidebar (navigation + dark mode toggle), ErrorBoundary
 - `src/components/common/` — Shared components (AiTutor, CircuitCharts, CircuitParameterSliders, MathWrapper, Tabs, CollapsibleSection, ChallengeCard, ConceptCheck, ModuleNavigation, PredictionGate, SectionHook, TableOfContents)
@@ -28,43 +28,49 @@ Interactive learning platform for analog circuit analysis. React 19 + TypeScript
 - `src/App.tsx` — Main app with React Router + Suspense code-splitting
 - `src/main.tsx` — Entry point
 
+### Key Data Shapes
+
+| Interface | Fields | Purpose |
+|-----------|--------|---------|
+| `CircuitParams` | `R`, `L`, `C`, `voltage` | Input to the solver |
+| `TimeSeriesPoint` | `time`, `voltage`, `current` | Single data point |
+| `CircuitResponse` | `data[]`, `dampingType?`, `alpha?`, `omega0?`, `zeta?`, `timeConstant?` | Full simulation output |
+| `Complex` | `real`, `imag` | Pole/zero representation |
+| `MaterialProperty` | `name`, `resistivity?`, `permittivity?`, `permeability?` | Material constants |
+
 ### Key Patterns
 
-- **URL param sync** — InteractiveLab syncs circuit config (type, input, R, L, C, V) to URL search params via `useSearchParams` + `useDeferredValue`. Enables shareable lab links. Pattern is inline — extract to a `useShareableParams` hook if adding to more modules.
-- **Chart export** — InteractiveLab has SVG→Canvas→PNG export (2x resolution, dark/light aware). Pattern is inline in `handleDownloadChart` — extract to `useChartExport` hook or `ChartToolbar` component if reusing.
+- **URL param sync** — InteractiveLab syncs circuit config (type, input, R, L, C, V) to URL search params via `useSearchParams` + `useDeferredValue`. Enables shareable lab links. Extracted to `useShareableParams` hook.
+- **Chart export** — InteractiveLab has SVG→Canvas→PNG export (2x resolution, dark/light aware). Extracted to `useChartExport` hook.
 - **Active recall** — ConceptCheck (multiple-choice + predict-reveal), ChallengeCard (auto-check with hints), PredictionGate (predict-before-reveal wrapper). Used across all modules.
 - **Progressive disclosure** — CollapsibleSection wraps secondary content. Experiment tips, equations, worked examples default-closed to reduce scroll.
 
-## Conventions
+## Module-Specific Conventions
 
-- React functional components with TypeScript
-- Tailwind CSS for styling (via `cn()` utility from `src/utils/cn.ts`)
-- KaTeX for math rendering (wrapped by `MathWrapper` component)
 - Recharts for data visualization / circuit plots
-- Lucide React for icons
-- React Router for navigation
-- vite-plugin-pwa for service worker generation and offline caching (auto-update strategy)
 - Optional Google Generative AI integration for AI tutor (API key in localStorage only)
-- Cross-module URLs via `src/constants/modules.ts` (configurable in `.env`)
-- Dark mode: shared `emac-theme` localStorage key across all three modules
+- `useShareableParams` hook for URL param sync (clampNum, parseEnum, useUrlSync, useCopyLink)
+- `useChartExport` hook for SVG→PNG chart export
 
-## Cross-Module Integration
+### User Flows
 
-- **Dark mode**: Shared `emac-theme` localStorage key — toggling in any module affects all three
-- **Navigation**: `src/constants/modules.ts` provides URLs to M1 and M3
-- **Content bridges**: Laplace transforms → M3 impedance analysis; Component physics ← M1 magnetic circuits
+- **Guided Learning Path:** Overview → Component Physics → Circuit Analysis → Laplace Theory → S-Domain Analysis → Interactive Lab
+- **Think it Through (Socratic Tutor):** Click "Think it Through" → Enter Gemini API key → Guided Socratic dialogue with LaTeX-formatted responses → Persists across page navigation
+- **Interactive Circuit Simulation:** Select circuit type (RC/RL/RLC) → Toggle input (Step/Impulse) → Adjust sliders → See live charts + equations + analysis
+
+## Content Bridges
+
+- **Laplace transforms** → M3 impedance analysis
+- **Component physics** ← M1 magnetic circuits
 
 ## Skills
 
-When refactoring code → read `skills/refactor/SKILL.md` first.
-When building or improving frontend UI/UX → read `skills/frontend-design/SKILL.md` first.
+- `/refactor` — Code refactoring workflow (see `skills/refactor/SKILL.md`)
+- Frontend Design — Educational app design guidelines (see `skills/frontend-design/SKILL.md`)
 
-## Context Files
+## Reference
 
-- `context/current-sprint.md` — What's being built right now
 - `context/decisions.md` — Architecture decision log (28 ADRs)
-- `context/known-issues.md` — Active bugs and technical debt
-- `context/project-reference.md` — Detailed technical reference
 
 ## Do Not Touch
 
